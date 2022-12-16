@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "it.hurts.sskirillss.nerb.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "nerb.refmap.json",
+  "mixins": [
+    "RecipeBookMixin",
+    "ServerRecipeBookMixin"
+  ],
+  "client": [
+    "ClientPacketListenerMixin",
+    "ClientRecipeBookMixin",
+    "ScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
