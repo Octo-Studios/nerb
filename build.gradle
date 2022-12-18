@@ -23,11 +23,11 @@ apply plugin: 'java'
 
 compileJava.options.encoding = 'UTF-8'
 
-version = '1.19.2-0.1'
+version = '1.16.5-0.1'
 group = 'it.hurts.sskirillss'
 archivesBaseName = 'nerb'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 mixin {
@@ -35,7 +35,7 @@ mixin {
 }
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.11.27-1.19.2'
+    mappings channel: 'official', version: '1.16.5'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -70,7 +70,7 @@ dependencies {
 
     implementation 'org.jetbrains:annotations:20.1.0'
 
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.26'
 }
 
 jar {

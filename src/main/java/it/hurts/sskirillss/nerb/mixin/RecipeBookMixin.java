@@ -1,6 +1,6 @@
 package it.hurts.sskirillss.nerb.mixin;
 
-import net.minecraft.stats.RecipeBook;
+import net.minecraft.item.crafting.RecipeBook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -9,7 +9,7 @@
     "ServerRecipeBookMixin"
   ],
   "client": [
-    "ClientPacketListenerMixin",
+    "ClientPlayNetHandlerMixin",
     "ClientRecipeBookMixin",
     "ScreenMixin"
   ],

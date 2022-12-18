@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[35,)"
 license = "All Rights Reserved"
 [[mods]]
 modId = "nerb"
@@ -12,12 +12,6 @@ description = '''
 [[dependencies.nerb]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
-ordering = "NONE"
-side = "BOTH"
-[[dependencies.nerb]]
-modId = "minecraft"
-mandatory = true
-versionRange = "[1.19.2,1.20)"
+versionRange = "[36,)"
 ordering = "NONE"
 side = "BOTH"
