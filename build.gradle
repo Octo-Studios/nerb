@@ -20,7 +20,7 @@ apply plugin: 'java'
 
 compileJava.options.encoding = 'UTF-8'
 
-version = '1.19.4-0.2'
+version = '1.20.1-0.2'
 group = 'it.hurts.sskirillss'
 archivesBaseName = 'nerb'
 
@@ -32,7 +32,7 @@ mixin {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.19.4'
+    mappings channel: 'official', version: '1.20.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -67,7 +67,7 @@ dependencies {
 
     implementation 'org.jetbrains:annotations:20.1.0'
 
-    minecraft 'net.minecraftforge:forge:1.19.4-45.1.0'
+    minecraft 'net.minecraftforge:forge:1.20.1-47.0.1'
 }
 
 jar {
