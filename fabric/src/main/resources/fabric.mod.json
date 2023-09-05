@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "",
+  "authors": [ "SSKirillSS" ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/SSKirillSS/nerb"
+  },
+  "license": "All Rights Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "it.hurts.sskirillss.nerb.fabric.NERBFabric"
+    ]
+  },
+  "mixins": [ "${mod_id}-common.mixins.json" ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.19.2"
+  }
+}

@@ -1,0 +1,56 @@
+[versions]
+sponge_mixin = "0.8.5"
+minecraft = "1.20.1"
+game_version_range = "[1.19,)"
+
+# Forge
+# https://docs.minecraftforge.net/en/latest/gettingstarted/
+forge_loader = "1.20.1-47.1.0"
+forge_version_loader = "[43,)"
+forge_version_range = "[43,)"
+
+# Fabric
+# https://fabricmc.net/develop/
+fabric_loader = "0.14.22"
+fabric_api = "0.86.1+1.20.1"
+
+# Parchment
+# https://parchmentmc.org/docs/getting-started
+parchment = "1.19.2:2022.11.27"
+
+# Architectury
+# https://maven.architectury.dev/architectury-plugin/architectury-plugin.gradle.plugin
+# https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin
+architectury_api = "9.1.12"
+architectury_plugin = "3.4-SNAPSHOT"
+architectury_loom = "1.1-SNAPSHOT"
+
+# Shadow
+# https://github.com/johnrengelman/shadow
+shadow = "7.1.2"
+
+[libraries]
+sponge_mixin = { module = "org.spongepowered:mixin", version.ref = "sponge_mixin" }
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+
+# Forge
+forge_loader = { module = "net.minecraftforge:forge", version.ref = "forge_loader" }
+
+# Fabric
+fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
+fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
+
+# Architectury
+architectury_api = { module = "dev.architectury:architectury", version.ref = "architectury_api" }
+architectury_fabric = { module = "dev.architectury:architectury-fabric", version.ref = "architectury_api" }
+architectury_forge = { module = "dev.architectury:architectury-forge", version.ref = "architectury_api" }
+
+# If you have multiple similar dependencies, you can declare a dependency bundle and reference it on the build script with "libs.bundles.example".
+[bundles]
+#fabric_api = ["fabric_api", "fabric_api_deprecated"]
+
+[plugins]
+idea_ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.+" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+architectury_plugin = { id = "architectury-plugin", version.ref = "architectury_plugin" }
+architectury_loom = { id = "dev.architectury.loom", version.ref = "architectury_loom" }
