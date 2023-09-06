@@ -1,15 +1,11 @@
 {
   "required": true,
-  "package": "it.hurts.sskirillss.nerb.mixin",
+  "package": "it.hurts.sskirillss.nerb.quilt.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
-    "ClientRecipeBookMixin",
-    "ScreenMixin"
   ],
   "mixins": [
-    "RecipeBookMixin",
-    "ServerRecipeBookMixin"
   ],
   "injectors": {
     "defaultRequire": 1

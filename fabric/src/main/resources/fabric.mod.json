@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "${mod_id}",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "${mod_name}",
-  "description": "",
-  "authors": [ "SSKirillSS" ],
+  "authors": [
+    "${mod_authors}"
+  ],
   "contact": {
-    "homepage": "",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/notenoughrecipebook",
     "sources": "https://github.com/SSKirillSS/nerb"
   },
   "license": "All Rights Reserved",
@@ -16,9 +17,12 @@
       "it.hurts.sskirillss.nerb.fabric.NERBFabric"
     ]
   },
-  "mixins": [ "${mod_id}-common.mixins.json" ],
+  "mixins": [
+    "nerb.mixins.json",
+    "nerb-common.mixins.json"
+  ],
   "depends": {
     "fabric": "*",
-    "minecraft": ">=1.19.2"
+    "minecraft": ">=1.20"
   }
 }

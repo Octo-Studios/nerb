@@ -1,63 +1,44 @@
 plugins {
-  alias(libs.plugins.architectury.plugin)
-  alias(libs.plugins.architectury.loom).apply(false)
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.2-SNAPSHOT" apply false
 }
 
 architectury {
-  minecraft = libs.versions.minecraft.get()
+    minecraft = minecraft_version
 }
 
 subprojects {
-  apply plugin: libs.plugins.architectury.loom.get().pluginId
+    apply plugin: "dev.architectury.loom"
 
-  loom {
-    silentMojangMappingsLicense()
-  }
+    loom {
+        silentMojangMappingsLicense()
+    }
 
-  dependencies {
-    minecraft(libs.minecraft)
-    mappings(loom.officialMojangMappings())
-    compileOnly(libs.sponge.mixin)
-  }
+    dependencies {
+        minecraft "com.mojang:minecraft:${minecraft_version}"
+
+        mappings loom.officialMojangMappings()
+    }
 }
 
 allprojects {
-  apply plugin: "java"
-  apply plugin: libs.plugins.architectury.plugin.get().pluginId
-  apply plugin: "maven-publish"
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
 
-  archivesBaseName = project.mod_id
-  version = libs.versions.minecraft.get() + '-' + project.mod_version
-  group = project.maven_group
+    archivesBaseName = mod_id
+    version = mod_version
 
-  repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-  }
+    repositories {
 
-  tasks.withType(JavaCompile).configureEach {
-    options.encoding = "UTF-8"
-    options.release.set(17)
-  }
-
-  java {
-    withSourcesJar()
-  }
-
-  jar {
-    manifest {
-      attributes([
-        "Specification-Title"     : "nerb",
-        "Specification-Vendor"    : "SSKirillSS",
-        "Specification-Version"   : "1",
-        "Implementation-Title"    : project.name,
-        "Implementation-Version"  : "${mod_version}",
-        "Implementation-Vendor"   : "SSKirillSS",
-        "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-      ])
     }
-  }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release = 17
+    }
+
+    java {
+        withSourcesJar()
+    }
 }

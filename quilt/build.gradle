@@ -2,21 +2,17 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+repositories {
+    maven { url "https://maven.quiltmc.org/repository/release/" }
+}
+
 architectury {
     platformSetupLoomIde()
-    forge()
+    loader("quilt")
 }
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-
-        mixinConfig "nerb-common.mixins.json"
-        mixinConfig "nerb.mixins.json"
-    }
 }
 
 configurations {
@@ -24,21 +20,20 @@ configurations {
     shadowCommon
     compileOnly.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    developmentQuilt.extendsFrom common
 }
 
 dependencies {
-    forge "net.neoforged:forge:${minecraft_version}-${forge_version}"
+    modImplementation "org.quiltmc:quilt-loader:${quilt_loader_version}"
+    modApi "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilt_fabric_api_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionQuilt")) { transitive false }
+    common(project(path: ":fabric-like", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":fabric-like", configuration: "transformProductionQuilt")) { transitive false }
 }
 
-repositories {
-    maven { url "https://maven.neoforged.net/releases/" }
-}
-
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def resourceTargets = ['quilt.mod.json']
 def replaceProperties = [
         mod_id     : mod_id, mod_name: mod_name,
         mod_version: mod_version, mod_authors: mod_authors
@@ -53,7 +48,6 @@ processResources {
 }
 
 shadowJar {
-    exclude "fabric.mod.json"
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
@@ -61,6 +55,7 @@ shadowJar {
 }
 
 remapJar {
+    injectAccessWidener = true
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier = null

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "mixin": [
+    "nerb.mixins.json",
+    "nerb-common.mixins.json"
+  ],
+  "quilt_loader": {
+    "group": "${mod_id}",
+    "id": "${mod_id}",
+    "version": "${mod_version}",
+    "metadata": {
+      "name": "${mod_name}",
+      "authors": [
+        "${mod_authors}"
+      ],
+      "contact": {
+        "sources": "https://github.com/SSKirillSS/nerb"
+      }
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "it.hurts.sskirillss.nerb.quilt.NERBQuilt"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": "*"
+      }
+    ]
+  }
+}
