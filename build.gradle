@@ -4,7 +4,7 @@ plugins {
 }
 
 architectury {
-    minecraft = minecraft_version
+    minecraft = rootProject.minecraft_version
 }
 
 subprojects {
@@ -15,7 +15,7 @@ subprojects {
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:${minecraft_version}"
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 
         mappings loom.officialMojangMappings()
     }
@@ -26,8 +26,9 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
-    archivesBaseName = mod_id
-    version = mod_version
+    archivesBaseName = rootProject.mod_id
+    version = rootProject.mod_version
+    group = rootProject.maven_group
 
     repositories {
 
@@ -38,7 +39,21 @@ allprojects {
         options.release = 17
     }
 
-    java {
-        withSourcesJar()
+    tasks.register('collectJars', Copy) {
+        subprojects {
+            def ignoredProjects = ['common', 'fabric-like'];
+
+            if (!ignoredProjects.contains(project.name)) {
+                def remapJar = project.tasks.named('remapJar')
+
+                dependsOn remapJar
+                from remapJar
+                into 'build/libs'
+            }
+        }
+    }
+
+    assemble {
+        dependsOn(collectJars)
     }
 }
