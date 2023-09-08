@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientRecipeBook.class)
 public class ClientRecipeBookMixin {
     @Inject(method = "setupCollections", at = @At("HEAD"), cancellable = true)
-    public void onSetup(Iterable<Recipe<?>> iterable, RegistryAccess registryAccess,CallbackInfo ci) {
+    public void onSetup(Iterable<Recipe<?>> iterable, CallbackInfo ci) {
         ci.cancel();
     }
 }
