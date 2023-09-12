@@ -1,7 +1,6 @@
 package it.hurts.sskirillss.nerb.mixin;
 
 import net.minecraft.client.ClientRecipeBook;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.crafting.Recipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
