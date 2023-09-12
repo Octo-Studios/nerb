@@ -1,0 +1,69 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+configurations {
+    common
+    shadowCommon
+    compileOnly.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+    common(project(path: ":fabric-like", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":fabric-like", configuration: "transformProductionFabric")) { transitive false }
+}
+
+def resourceTargets = ['fabric.mod.json']
+def replaceProperties = [
+        mod_id     : mod_id, mod_name: mod_name,
+        mod_version: mod_version, mod_authors: mod_authors
+]
+
+processResources {
+    inputs.properties replaceProperties
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+
+    archiveClassifier = "dev-" + loom.platform.get().name()
+}
+
+remapJar {
+    injectAccessWidener = true
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = loom.platform.get().name()
+}
+
+jar {
+    archiveClassifier = "dev"
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}

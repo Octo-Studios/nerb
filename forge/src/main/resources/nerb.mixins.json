@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "it.hurts.sskirillss.nerb.forge.mixin",
+  "compatibilityLevel": "JAVA_13",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
