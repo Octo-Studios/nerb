@@ -5,7 +5,6 @@ import net.minecraft.network.protocol.game.ClientboundRecipePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.ServerRecipeBook;
-import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,7 +21,7 @@ public class ServerRecipeBookMixin {
     }
 
     @Inject(method = "fromNbt", at = @At("HEAD"), cancellable = true)
-    public void onLoad(CompoundTag pTag, RecipeManager pRecipeManager, CallbackInfo ci) {
+    public void onLoad(CompoundTag pTag, CallbackInfo ci) {
         ci.cancel();
     }
 
