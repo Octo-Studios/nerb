@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[31,)"
+loaderVersion = "[28,)"
 license = "All Rights Reserved"
 
 [[mods]]
@@ -11,13 +11,13 @@ authors = "${mod_authors}"
 [[dependencies.${mod_id}]]
 modId = "forge"
 mandatory = true
-versionRange = "[31,)"
+versionRange = "[28,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.15.2,)"
+versionRange = "[1.14.4,)"
 ordering = "NONE"
 side = "BOTH"
