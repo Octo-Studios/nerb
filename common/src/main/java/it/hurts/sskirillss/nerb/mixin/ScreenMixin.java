@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ScreenMixin {
     @Inject(method = "addRenderableWidget(Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;", at = @At("HEAD"), cancellable = true)
     public <T extends GuiEventListener & Renderable & NarratableEntry> void onWidgetAdded(T widget, CallbackInfoReturnable<T> cir) {
-        if (widget instanceof ImageButton image && image.resourceLocation.equals(new ResourceLocation("textures/gui/recipe_button.png")))
+        if (widget instanceof ImageButton image && image.sprites.enabled().equals(new ResourceLocation("recipe_book/button")))
             cir.setReturnValue(null);
     }
 }

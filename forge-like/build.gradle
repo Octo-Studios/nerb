@@ -1,0 +1,15 @@
+architectury {
+    forgeLike(["forge", "neoforge"]) {
+        it.platformPackage "neoforge", "forge"
+    }
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${rootProject.architectury.minecraft}-${rootProject.forge_version}"
+
+    compileOnly(project(path: ":common", configuration: "namedElements")) { transitive false }
+}
