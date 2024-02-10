@@ -3,8 +3,10 @@ plugins {
 }
 
 architectury {
-    platformSetupLoomIde()
-    neoForge()
+    neoForge {
+        platformPackage = "forge"
+        remapForgeLike "net/minecraftforge/common/extensions/IForgeItem", "net/neoforged/neoforge/common/extensions/IItemExtension"
+    }
 }
 
 loom {
