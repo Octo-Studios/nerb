@@ -36,7 +36,7 @@ repositories {
     maven { url "https://maven.neoforged.net/releases/" }
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def resourceTargets = ['META-INF/neoforge.mods.toml', 'pack.mcmeta']
 def replaceProperties = [
         mod_id     : mod_id, mod_name: mod_name,
         mod_version: mod_version, mod_authors: mod_authors
