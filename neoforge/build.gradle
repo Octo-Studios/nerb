@@ -27,9 +27,7 @@ dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    common(project(path: ":forge-like", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
-    shadowCommon(project(path: ":forge-like", configuration: "transformProductionForge")) { transitive false }
 }
 
 repositories {

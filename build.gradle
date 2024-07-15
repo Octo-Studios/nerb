@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4.155"
-    id "dev.architectury.loom" version "1.6.397" apply false
+    id "dev.architectury.loom" version "1.7.405" apply false
 }
 
 architectury {
@@ -17,7 +17,9 @@ subprojects {
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 
-        mappings loom.officialMojangMappings()
+        mappings loom.layered() {
+            officialMojangMappings()
+        }
     }
 }
 
@@ -41,7 +43,7 @@ allprojects {
 
     tasks.register('collectJars', Copy) {
         subprojects {
-            def ignoredProjects = ['common', 'fabric-like', 'forge-like'];
+            def ignoredProjects = ['common'];
 
             if (!ignoredProjects.contains(project.name)) {
                 def remapJar = project.tasks.named('remapJar')
