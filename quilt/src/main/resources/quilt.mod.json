@@ -1,28 +1,22 @@
 {
   "schema_version": 1,
-  "mixin": [
-    "nerb.mixins.json",
-    "nerb-common.mixins.json"
-  ],
   "quilt_loader": {
-    "group": "${mod_id}",
+    "group": "${mod_group}",
     "id": "${mod_id}",
     "version": "${mod_version}",
     "metadata": {
-      "name": "${mod_name}",
-      "authors": [
-        "${mod_authors}"
-      ],
-      "contact": {
-        "sources": "https://github.com/SSKirillSS/nerb"
-      }
+      "name": "${mod_id}",
+      "description": "${mod_description}"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
       "init": [
-        "it.hurts.sskirillss.nerb.quilt.NERBQuilt"
+        "${mod_group}.quilt.NERBQuilt"
       ]
     },
+    "mixins": [
+      "${mod_id}-common.mixins.json"
+    ],
     "depends": [
       {
         "id": "quilt_loader",
@@ -34,7 +28,15 @@
       },
       {
         "id": "minecraft",
-        "version": "*"
+        "version": ">=1.21"
+      },
+      {
+        "id": "architectury",
+        "version": ">=13.0.2"
+      },
+      {
+        "id": "octolib",
+        "version": ">=0.4.2"
       }
     ]
   }
