@@ -2,7 +2,7 @@ package it.hurts.octostudios.nerb.common;
 
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
-import it.hurts.octostudios.nerb.common.compat.CraftingManagerCompat;
+import it.hurts.octostudios.nerb.common.compat.craftingmanager.CraftingManagerCompat;
 import it.hurts.octostudios.nerb.common.config.misc.ButtonMode;
 import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
 import net.minecraft.server.MinecraftServer;

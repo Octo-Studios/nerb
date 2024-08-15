@@ -1,6 +1,6 @@
 package it.hurts.octostudios.nerb.common.mixin;
 
-import it.hurts.octostudios.nerb.common.compat.CraftingManagerCompat;
+import it.hurts.octostudios.nerb.common.compat.craftingmanager.CraftingManagerCompat;
 import it.hurts.octostudios.nerb.common.config.misc.ButtonMode;
 import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
 import net.minecraft.client.gui.components.ImageButton;
@@ -14,12 +14,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static it.hurts.octostudios.nerb.common.init.ConfigRegistry.CONFIG;
+
 @Mixin(Screen.class)
 public class ScreenMixin {
     @Inject(method = "addRenderableWidget", at = @At("HEAD"), cancellable = true)
     public <T extends GuiEventListener & Renderable & NarratableEntry> void onWidgetAdded(T widget, CallbackInfoReturnable<T> cir) {
-        if (ConfigRegistry.CONFIG.getButtonMode() == ButtonMode.DISABLED && CraftingManagerCompat.isAnyLoaded() && widget instanceof ImageButton image
-                && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES)) {
+        if ((CONFIG.getButtonMode() == ButtonMode.DISABLED || (CONFIG.getButtonMode() == ButtonMode.TOGGLE && !CraftingManagerCompat.isAnyLoaded()))
+                && widget instanceof ImageButton image && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES)) {
             cir.setReturnValue(null);
         }
     }

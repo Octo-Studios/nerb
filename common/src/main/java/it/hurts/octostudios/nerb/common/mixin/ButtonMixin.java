@@ -1,11 +1,9 @@
 package it.hurts.octostudios.nerb.common.mixin;
 
-import dev.emi.emi.screen.EmiScreenManager;
-import it.hurts.octostudios.nerb.common.compat.CraftingManagerCompat;
+import it.hurts.octostudios.nerb.common.compat.craftingmanager.CraftingManagerCompat;
+import it.hurts.octostudios.nerb.common.compat.craftingmanager.impl.base.ICMEntry;
 import it.hurts.octostudios.nerb.common.config.misc.ButtonMode;
 import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
-import me.shedaniel.rei.api.client.REIRuntime;
-import mezz.jei.common.Internal;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
@@ -24,14 +22,8 @@ public class ButtonMixin {
         Button button = (Button) (Object) this;
 
         if (button instanceof ImageButton image && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES)) {
-            if (CraftingManagerCompat.isJEILoaded())
-                Internal.getClientToggleState().toggleOverlayEnabled();
-
-            if (CraftingManagerCompat.isREILoaded())
-                REIRuntime.getInstance().toggleOverlayVisible();
-
-            if (CraftingManagerCompat.isEMILoaded())
-                EmiScreenManager.toggleVisibility(false);
+            for (ICMEntry entry : CraftingManagerCompat.ENTRIES.values())
+                entry.toggleVisibility();
 
             ci.cancel();
         }
