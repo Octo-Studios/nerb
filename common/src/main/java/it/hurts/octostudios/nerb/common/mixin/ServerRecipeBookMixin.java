@@ -1,5 +1,7 @@
 package it.hurts.octostudios.nerb.common.mixin;
 
+import it.hurts.octostudios.nerb.common.config.misc.ButtonMode;
+import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundRecipePacket;
 import net.minecraft.resources.ResourceLocation;
@@ -18,16 +20,19 @@ import java.util.List;
 public class ServerRecipeBookMixin {
     @Inject(method = "toNbt", at = @At("HEAD"), cancellable = true)
     public void onSave(CallbackInfoReturnable<CompoundTag> cir) {
-        cir.setReturnValue(new CompoundTag());
+        if (ConfigRegistry.CONFIG.getButtonMode() != ButtonMode.DISCOVERED)
+            cir.setReturnValue(new CompoundTag());
     }
 
     @Inject(method = "fromNbt", at = @At("HEAD"), cancellable = true)
     public void onLoad(CompoundTag pTag, RecipeManager pRecipeManager, CallbackInfo ci) {
-        ci.cancel();
+        if (ConfigRegistry.CONFIG.getButtonMode() != ButtonMode.DISCOVERED)
+            ci.cancel();
     }
 
     @Inject(method = "sendRecipes", at = @At("HEAD"), cancellable = true)
     public void onLoad(ClientboundRecipePacket.State pState, ServerPlayer pPlayer, List<ResourceLocation> pRecipes, CallbackInfo ci) {
-        ci.cancel();
+        if (ConfigRegistry.CONFIG.getButtonMode() != ButtonMode.DISCOVERED)
+            ci.cancel();
     }
 }

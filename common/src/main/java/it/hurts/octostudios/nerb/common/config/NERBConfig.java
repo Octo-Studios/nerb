@@ -8,9 +8,11 @@ import lombok.Data;
 @Data
 public class NERBConfig implements OctoConfig {
     @Prop(comment = """
-            Mode of the recipe book button. Supported modes:
-            DISABLED: Removes the recipe book button from your inventory
-            ENABLED: Keeps the recipe book button in your inventory (its vanilla functionality will still be disabled)
+            Recipe Book mode:
+            DISABLED: Removes the recipe book button from your inventory.
+            DISCOVERED: Automatically unlocks all existing recipes in your recipe book.
+            ENABLED: Retains the recipe book button in your inventory, but its default functionality remains disabled.
+            TOGGLE: Keeps the recipe book button in your inventory, but instead of toggling the recipe book, it toggles the visibility of the JEI/REI/EMI UI. Its default functionality remains disabled.
             """)
-    private ButtonMode buttonMode = ButtonMode.DISABLED;
+    private ButtonMode buttonMode = ButtonMode.TOGGLE;
 }
