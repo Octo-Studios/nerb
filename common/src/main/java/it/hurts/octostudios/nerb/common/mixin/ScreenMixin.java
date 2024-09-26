@@ -21,7 +21,7 @@ public class ScreenMixin {
     @Inject(method = "addRenderableWidget", at = @At("HEAD"), cancellable = true)
     public <T extends GuiEventListener & Renderable & NarratableEntry> void onWidgetAdded(T widget, CallbackInfoReturnable<T> cir) {
         if ((CONFIG.getButtonMode() == ButtonMode.DISABLED || (CONFIG.getButtonMode() == ButtonMode.TOGGLE && !CraftingManagerCompat.isAnyLoaded()))
-                && widget instanceof ImageButton image && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES)) {
+                && widget instanceof ImageButton image && image.resourceLocation != null && image.resourceLocation.equals(RecipeBookComponent.RECIPE_BOOK_LOCATION)) {
             cir.setReturnValue(null);
         }
     }

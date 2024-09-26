@@ -21,7 +21,7 @@ public class ButtonMixin {
 
         Button button = (Button) (Object) this;
 
-        if (button instanceof ImageButton image && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES)) {
+        if (button instanceof ImageButton image && image.resourceLocation != null && image.resourceLocation.equals(RecipeBookComponent.RECIPE_BOOK_LOCATION)) {
             for (ICMEntry entry : CraftingManagerCompat.ENTRIES.values())
                 entry.toggleVisibility();
 

@@ -10,7 +10,7 @@ architectury {
 
 allprojects {
     group = rootProject.mod_group
-    version = rootProject.mod_version
+    version = rootProject.mod_version + "+" + rootProject.minecraft_version
 }
 
 subprojects {
@@ -64,25 +64,7 @@ subprojects {
     }
 
     tasks.withType(JavaCompile).configureEach {
-        it.options.release = 21
-    }
-
-    tasks.register('collectJars', Copy) {
-        subprojects {
-            def ignoredProjects = ['common'];
-
-            if (!ignoredProjects.contains(project.name)) {
-                def remapJar = project.tasks.named('remapJar')
-
-                dependsOn remapJar
-                from remapJar
-                into 'build/libs'
-            }
-        }
-    }
-
-    assemble {
-        dependsOn(collectJars)
+        it.options.release = 17
     }
 
     publishing {
