@@ -7,6 +7,12 @@ architectury {
     forge()
 }
 
+loom {
+    forge {
+        mixinConfig "${mod_id}-common.mixins.json"
+    }
+}
+
 configurations {
     common {
         canBeResolved = true
@@ -44,7 +50,7 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 }
 
-def resourceTargets = ['META-INF/mods.toml']
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def replaceProperties = [
         mod_version: mod_version, mod_group: mod_group, mod_name: mod_name,
         mod_id     : mod_id, mod_description: mod_description, mod_authors: mod_authors,
