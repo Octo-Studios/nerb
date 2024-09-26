@@ -82,7 +82,7 @@ subprojects {
             maven(MavenPublication) {
                 groupId = group
                 artifactId = project.mod_id + "-" + project.name
-                version = version + "+" + project.minecraft_version
+                version = version
                 from components.java
             }
         }
