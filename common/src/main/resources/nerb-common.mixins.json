@@ -9,6 +9,7 @@
   ],
   "mixins": [
     "RecipeBookMixin",
+    "ServerPlayerMixin",
     "ServerRecipeBookMixin"
   ],
   "injectors": {
