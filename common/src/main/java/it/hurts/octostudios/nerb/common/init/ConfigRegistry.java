@@ -1,12 +1,17 @@
 package it.hurts.octostudios.nerb.common.init;
 
 import it.hurts.octostudios.nerb.common.config.NERBConfig;
+import it.hurts.octostudios.nerb.common.config.compat.EMICompatConfig;
 import it.hurts.octostudios.octolib.modules.config.ConfigManager;
 
 public class ConfigRegistry {
-    public static NERBConfig CONFIG = new NERBConfig();
+    public static NERBConfig GENERAL = new NERBConfig();
+
+    public static EMICompatConfig EMI_COMPAT = new EMICompatConfig();
 
     public static void registerCommon() {
-        ConfigManager.registerConfig("nerb", CONFIG);
+        ConfigManager.registerConfig("nerb/general", GENERAL);
+
+        ConfigManager.registerConfig("nerb/compat/emi", EMI_COMPAT);
     }
 }

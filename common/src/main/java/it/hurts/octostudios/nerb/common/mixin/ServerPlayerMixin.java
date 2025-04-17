@@ -1,6 +1,6 @@
 package it.hurts.octostudios.nerb.common.mixin;
 
-import it.hurts.octostudios.nerb.common.config.misc.ButtonMode;
+import it.hurts.octostudios.nerb.common.config.NERBConfig;
 import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ServerPlayerMixin {
     @Inject(method = "awardRecipes", at = @At("HEAD"), cancellable = true)
     public void onAwardRecipes(Collection<RecipeHolder<?>> holders, CallbackInfoReturnable<Integer> cir) {
-        if (ConfigRegistry.CONFIG.getButtonMode() != ButtonMode.DISCOVERED)
+        if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED)
             cir.setReturnValue(0);
     }
 

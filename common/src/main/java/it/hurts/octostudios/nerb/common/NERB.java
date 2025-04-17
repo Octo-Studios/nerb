@@ -3,7 +3,7 @@ package it.hurts.octostudios.nerb.common;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import it.hurts.octostudios.nerb.common.compat.craftingmanager.CraftingManagerCompat;
-import it.hurts.octostudios.nerb.common.config.misc.ButtonMode;
+import it.hurts.octostudios.nerb.common.config.NERBConfig;
 import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +18,7 @@ public class NERB {
         });
 
         PlayerEvent.PLAYER_JOIN.register((ServerPlayer player) -> {
-            if (ConfigRegistry.CONFIG.getButtonMode() != ButtonMode.DISCOVERED)
+            if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED)
                 return;
 
             MinecraftServer server = player.getServer();

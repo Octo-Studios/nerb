@@ -2,7 +2,7 @@ package it.hurts.octostudios.nerb.common.mixin;
 
 import it.hurts.octostudios.nerb.common.compat.craftingmanager.CraftingManagerCompat;
 import it.hurts.octostudios.nerb.common.compat.craftingmanager.impl.base.ICMEntry;
-import it.hurts.octostudios.nerb.common.config.misc.ButtonMode;
+import it.hurts.octostudios.nerb.common.config.NERBConfig;
 import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ButtonMixin {
     @Inject(method = "onPress", at = @At("HEAD"), cancellable = true)
     public void onPress(CallbackInfo ci) {
-        if (ConfigRegistry.CONFIG.getButtonMode() != ButtonMode.TOGGLE || !CraftingManagerCompat.isAnyLoaded())
+        if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.TOGGLE || !CraftingManagerCompat.isAnyLoaded())
             return;
 
         Button button = (Button) (Object) this;
