@@ -18,14 +18,11 @@
     "${mod_id}-common.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.11",
-    "minecraft": "~1.21",
+    "fabricloader": ">=0.16.13",
+    "minecraft": ">=1.21.4",
     "java": ">=21",
-    "architectury": ">=13.0.2",
-    "octolib": ">=0.4.2",
+    "architectury": ">=15.0.3",
+    "octolib": ">=0.5.0.1",
     "fabric-api": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }

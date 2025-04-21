@@ -12,6 +12,6 @@ public class ConfigRegistry {
     public static void registerCommon() {
         ConfigManager.registerConfig("nerb/general", GENERAL);
 
-        ConfigManager.registerConfig("nerb/compat/emi", EMI_COMPAT);
+//        ConfigManager.registerConfig("nerb/compat/emi", EMI_COMPAT);
     }
 }
