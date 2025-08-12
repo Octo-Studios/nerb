@@ -2,7 +2,7 @@ package it.hurts.octostudios.nerb.common.init;
 
 import it.hurts.octostudios.nerb.common.config.NERBConfig;
 import it.hurts.octostudios.nerb.common.config.compat.EMICompatConfig;
-import it.hurts.octostudios.octolib.modules.config.ConfigManager;
+import it.hurts.octostudios.octolib.module.config.ConfigManager;
 
 public class ConfigRegistry {
     public static NERBConfig GENERAL = new NERBConfig();
