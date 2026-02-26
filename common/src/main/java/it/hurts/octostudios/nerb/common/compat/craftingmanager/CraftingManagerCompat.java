@@ -1,7 +1,6 @@
 package it.hurts.octostudios.nerb.common.compat.craftingmanager;
 
 import dev.architectury.platform.Platform;
-import it.hurts.octostudios.nerb.common.compat.craftingmanager.impl.EMIEntry;
 import it.hurts.octostudios.nerb.common.compat.craftingmanager.impl.JEIEntry;
 import it.hurts.octostudios.nerb.common.compat.craftingmanager.impl.REIEntry;
 import it.hurts.octostudios.nerb.common.compat.craftingmanager.impl.base.ICMEntry;
@@ -19,12 +18,12 @@ public class CraftingManagerCompat {
         return ENTRIES.containsKey("roughlyenoughitems");
     }
 
-    public static boolean isEMILoaded() {
-        return ENTRIES.containsKey("emi");
-    }
+//    public static boolean isEMILoaded() {
+//        return ENTRIES.containsKey("emi");
+//    }
 
     public static boolean isAnyLoaded() {
-        return isJEILoaded() || isREILoaded() || isEMILoaded();
+        return isJEILoaded() || isREILoaded(); //|| isEMILoaded();
     }
 
     public static void setupCommon() {
@@ -34,7 +33,7 @@ public class CraftingManagerCompat {
         if (Platform.isModLoaded("roughlyenoughitems"))
             ENTRIES.put("roughlyenoughitems", new REIEntry());
 
-        if (Platform.isModLoaded("emi"))
-            ENTRIES.put("emi", new EMIEntry());
+//        if (Platform.isModLoaded("emi"))
+//            ENTRIES.put("emi", new EMIEntry());
     }
 }

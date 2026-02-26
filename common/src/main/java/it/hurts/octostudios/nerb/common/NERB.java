@@ -21,10 +21,7 @@ public class NERB {
             if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED)
                 return;
 
-            MinecraftServer server = player.getServer();
-
-            if (server == null)
-                return;
+            MinecraftServer server = player.level().getServer();
 
             player.awardRecipes(server.getRecipeManager().getRecipes());
         });

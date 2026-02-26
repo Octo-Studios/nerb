@@ -11,9 +11,9 @@ dependencies {
 
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 
-    implementation "it.hurts.octostudios.octolib:octolib-common:$rootProject.octolib_version"
+    modImplementation "it.hurts.shatterbyte.shatterlib:shatterlib-common:$rootProject.shatterlib_version"
 
     implementation "mezz.jei:jei-${minecraft_version}-common:${jei_version}"
     implementation "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
-    implementation "dev.emi:emi-xplat-intermediary:${emi_version}"
+    //implementation "dev.emi:emi-xplat-intermediary:${emi_version}"
 }
