@@ -1,11 +1,11 @@
 package it.hurts.octostudios.nerb.common.config;
 
-import it.hurts.octostudios.octolib.module.config.annotation.Prop;
-import it.hurts.octostudios.octolib.module.config.impl.OctoConfig;
+import it.hurts.shatterbyte.shatterlib.module.config.annotation.Prop;
+import it.hurts.shatterbyte.shatterlib.module.config.impl.ShatterConfig;
 import lombok.Data;
 
 @Data
-public class NERBConfig implements OctoConfig {
+public class NERBConfig implements ShatterConfig {
     @Prop(comment = """
             Recipe Book mode:
             DISABLED: Removes the recipe book button with its default functionality from your inventory.

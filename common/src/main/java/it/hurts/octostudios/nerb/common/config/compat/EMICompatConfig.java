@@ -1,14 +1,13 @@
-package it.hurts.octostudios.nerb.common.config.compat;
-
-import it.hurts.octostudios.octolib.module.config.annotation.Prop;
-import it.hurts.octostudios.octolib.module.config.impl.OctoConfig;
-import lombok.Data;
-
-import java.util.Arrays;
-import java.util.List;
-
-@Data
-public class EMICompatConfig implements OctoConfig {
-    @Prop(comment = "Specifies the list of sidebars that should be disabled/enabled when the recipe book button is pressed. Only works when TOGGLE mode is enabled. Supported values: index, craftables, favorites, lookup-history, craft-history, chess. If none of the values are specified, clicking the recipe book button will disable the entire EMI UI. Even though all sidebars are listed here, EMI itself may prevent some its UI elements from being disabled.")
-    private List<String> toggleableSidebars = Arrays.asList("craftables");
-}
+//package it.hurts.octostudios.nerb.common.config.compat;
+//
+//import it.hurts.shatterbyte.shatterlib.module.config.annotation.Prop;
+//import lombok.Data;
+//
+//import java.util.Arrays;
+//import java.util.List;
+//
+//@Data
+//public class EMICompatConfig implements OctoConfig {
+//    @Prop(comment = "Specifies the list of sidebars that should be disabled/enabled when the recipe book button is pressed. Only works when TOGGLE mode is enabled. Supported values: index, craftables, favorites, lookup-history, craft-history, chess. If none of the values are specified, clicking the recipe book button will disable the entire EMI UI. Even though all sidebars are listed here, EMI itself may prevent some its UI elements from being disabled.")
+//    private List<String> toggleableSidebars = Arrays.asList("craftables");
+//}

@@ -2,7 +2,7 @@ package it.hurts.octostudios.nerb.common.mixin;
 
 import it.hurts.octostudios.nerb.common.config.NERBConfig;
 import it.hurts.octostudios.nerb.common.init.ConfigRegistry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +23,7 @@ public class ServerPlayerMixin {
     }
 
     @Inject(method = "awardRecipesByKey", at = @At("HEAD"), cancellable = true)
-    public void onAwardRecipesByKey(List<ResourceLocation> recipes, CallbackInfo ci) {
+    public void onAwardRecipesByKey(List<Identifier> recipes, CallbackInfo ci) {
         ci.cancel();
     }
 }
