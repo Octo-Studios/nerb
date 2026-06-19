@@ -1,19 +1,57 @@
-architectury {
-    common rootProject.enabled_platforms.split(',')
+plugins {
+    id 'multiloader-common'
+    id 'net.neoforged.moddev'
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/" + project.mod_id + ".accesswidener")
+neoForge {
+    neoFormVersion = neo_form_version
+
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.5.3'
+    compileOnly group: 'org.ow2.asm', name: 'asm', version: '9.9'
+    annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.5.3'
 
-    modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
+    compileOnly "it.hurts.shatterbyte.shatterlib:shatterlib-common:${shatterlib_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common:${jei_version}"
+}
 
-    modImplementation "it.hurts.shatterbyte.shatterlib:shatterlib-common:$rootProject.shatterlib_version"
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
 
-    implementation "mezz.jei:jei-${minecraft_version}-common:${jei_version}"
-    implementation "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
-    //implementation "dev.emi:emi-xplat-intermediary:${emi_version}"
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}
+
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+    configurations.named(variant) {
+        attributes {
+            attribute(loaderAttribute, 'common')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+        configurations.named(variant) {
+            attributes {
+                attribute(loaderAttribute, 'common')
+            }
+        }
+    }
 }

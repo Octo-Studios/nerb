@@ -1,35 +1,36 @@
 modLoader = "javafml"
-loaderVersion = "[4,)"
+loaderVersion = "${neoforge_loader_version_range}"
 issueTrackerURL = "${mod_tracker}"
-license = "${mod_license}"
-
-[[mixins]]
-config = "${mod_id}-common.mixins.json"
+license = "${license}"
 
 [[mods]]
 modId = "${mod_id}"
-version = "${mod_version}"
+version = "${version}"
 displayName = "${mod_name}"
-authors = "${mod_authors}"
-description = "${mod_description}"
+credits = "${credits}"
+authors = "${mod_author}"
+description = '''${description}'''
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.11,)"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.11,)"
+versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "shatterlib"
-type="required"
-versionRange = "[0.6.0.5,)"
+type = "required"
+versionRange = "[0.7.0,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[mixins]]
+config = "${mod_id}-common.mixins.json"
