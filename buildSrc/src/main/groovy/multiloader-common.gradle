@@ -47,6 +47,14 @@ repositories {
         name = 'Terraformers'
         url = 'https://maven.terraformersmc.com/'
     }
+    maven {
+        name = 'Shedaniel'
+        url = 'https://maven.shedaniel.me'
+    }
+    maven {
+        name = 'Architectury'
+        url = 'https://maven.architectury.dev'
+    }
 }
 
 def licenseFile = rootProject.file('LICENSE')
