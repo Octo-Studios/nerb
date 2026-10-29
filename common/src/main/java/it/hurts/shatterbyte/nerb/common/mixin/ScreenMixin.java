@@ -17,11 +17,12 @@ import static it.hurts.shatterbyte.nerb.common.init.ConfigRegistry.GENERAL;
 
 @Mixin(Screen.class)
 public class ScreenMixin {
-    @Inject(method = "addRenderableWidget", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "addRenderableWidget", at = @At("HEAD"))
     public <T extends GuiEventListener & Renderable & NarratableEntry> void onWidgetAdded(T widget, CallbackInfoReturnable<T> cir) {
         if ((GENERAL.getButtonMode() == NERBConfig.ButtonMode.DISABLED || (GENERAL.getButtonMode() == NERBConfig.ButtonMode.TOGGLE && !CraftingManagerCompat.isAnyLoaded()))
                 && widget instanceof ImageButton image && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES)) {
-            cir.setReturnValue(null);
+            image.visible = false;
+            image.active = false;
         }
     }
 }
