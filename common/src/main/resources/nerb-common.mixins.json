@@ -5,10 +5,13 @@
   "minVersion": "0.8",
   "client": [
     "ButtonMixin",
+    "ClientPacketListenerMixin",
     "ClientRecipeBookMixin",
     "ScreenMixin"
   ],
   "mixins": [
+    "PlayerAdvancementsMixin",
+    "RecipeManagerMixin",
     "ServerPlayerMixin",
     "ServerRecipeBookMixin"
   ],
