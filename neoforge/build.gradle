@@ -38,6 +38,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     implementation "it.hurts.shatterbyte.shatterlib:shatterlib-neoforge:${shatterlib_version}"
     implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
 }
 
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
