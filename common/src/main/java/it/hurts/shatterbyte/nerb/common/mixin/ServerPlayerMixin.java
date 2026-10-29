@@ -2,8 +2,9 @@ package it.hurts.shatterbyte.nerb.common.mixin;
 
 import it.hurts.shatterbyte.nerb.common.config.NERBConfig;
 import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +24,7 @@ public class ServerPlayerMixin {
     }
 
     @Inject(method = "awardRecipesByKey", at = @At("HEAD"), cancellable = true)
-    public void onAwardRecipesByKey(List<Identifier> recipes, CallbackInfo ci) {
+    public void onAwardRecipesByKey(List<ResourceKey<Recipe<?>>> recipes, CallbackInfo ci) {
         ci.cancel();
     }
 }
