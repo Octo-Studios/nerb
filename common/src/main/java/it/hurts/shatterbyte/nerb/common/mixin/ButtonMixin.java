@@ -28,4 +28,9 @@ public class ButtonMixin {
             ci.cancel();
         }
     }
+
+    public boolean shouldTakeFocusAfterInteraction() {
+        return !((Object) this instanceof ImageButton image && ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED
+                && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES));
+    }
 }
