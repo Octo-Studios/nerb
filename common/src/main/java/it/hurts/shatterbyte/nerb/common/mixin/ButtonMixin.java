@@ -1,8 +1,7 @@
 package it.hurts.shatterbyte.nerb.common.mixin;
 
 import it.hurts.shatterbyte.nerb.common.compat.craftingmanager.CraftingManagerCompat;
-import it.hurts.shatterbyte.nerb.common.compat.craftingmanager.impl.base.ICMEntry;
-import it.hurts.shatterbyte.nerb.common.config.NERBConfig;
+import it.hurts.shatterbyte.nerb.common.config.NERBClientConfig;
 import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -16,13 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ButtonMixin {
     @Inject(method = "onPress", at = @At("HEAD"), cancellable = true)
     public void onPress(CallbackInfo ci) {
-        if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.TOGGLE || !CraftingManagerCompat.isAnyLoaded())
+        if (ConfigRegistry.CLIENT.getButtonMode() != NERBClientConfig.ButtonMode.TOGGLE || !CraftingManagerCompat.isAnyLoaded())
             return;
 
-        Button button = (Button) (Object) this;
+        var button = (Button) (Object) this;
 
         if (button instanceof ImageButton image && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES)) {
-            for (ICMEntry entry : CraftingManagerCompat.ENTRIES.values())
+            for (var entry : CraftingManagerCompat.ENTRIES.values())
                 entry.toggleVisibility();
 
             ci.cancel();
@@ -30,7 +29,7 @@ public class ButtonMixin {
     }
 
     public boolean shouldTakeFocusAfterInteraction() {
-        return !((Object) this instanceof ImageButton image && ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED
+        return !((Object) this instanceof ImageButton image && ConfigRegistry.CLIENT.getButtonMode() != NERBClientConfig.ButtonMode.RECIPE_BOOK
                 && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES));
     }
 }

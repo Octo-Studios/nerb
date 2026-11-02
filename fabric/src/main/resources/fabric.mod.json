@@ -11,7 +11,10 @@
   "environment": "*",
   "accessWidener": "${mod_id}.accesswidener",
   "entrypoints": {
-    "main": [
+    "client": [
+      "${group}.fabric.NERBFabric"
+    ],
+    "server": [
       "${group}.fabric.NERBFabric"
     ]
   },

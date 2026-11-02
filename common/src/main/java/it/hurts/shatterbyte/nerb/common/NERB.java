@@ -1,8 +1,7 @@
 package it.hurts.shatterbyte.nerb.common;
 
-import it.hurts.shatterbyte.nerb.common.config.NERBConfig;
+import it.hurts.shatterbyte.nerb.common.config.NERBServerConfig;
 import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public class NERB {
@@ -13,7 +12,7 @@ public class NERB {
     }
 
     public static void onPlayerJoin(ServerPlayer player) {
-        if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED)
+        if (ConfigRegistry.SERVER.getRecipeBookMode() != NERBServerConfig.RecipeBookMode.DISCOVERED)
             return;
 
         player.awardRecipes(player.level().getServer().getRecipeManager().getRecipes());
