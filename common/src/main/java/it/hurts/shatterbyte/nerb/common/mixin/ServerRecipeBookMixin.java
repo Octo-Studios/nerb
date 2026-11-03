@@ -1,6 +1,6 @@
 package it.hurts.shatterbyte.nerb.common.mixin;
 
-import it.hurts.shatterbyte.nerb.common.config.NERBConfig;
+import it.hurts.shatterbyte.nerb.common.config.NERBServerConfig;
 import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import net.minecraft.network.protocol.game.ClientboundRecipeBookSettingsPacket;
 import net.minecraft.resources.ResourceKey;
@@ -21,13 +21,13 @@ import java.util.function.Predicate;
 public class ServerRecipeBookMixin {
     @Inject(method = "addRecipes", at = @At("HEAD"), cancellable = true)
     public void onAddRecipes(Collection<RecipeHolder<?>> recipes, ServerPlayer player, CallbackInfoReturnable<Integer> cir) {
-        if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED)
+        if (ConfigRegistry.SERVER.getRecipeBookMode() == NERBServerConfig.RecipeBookMode.DISABLED)
             cir.setReturnValue(0);
     }
 
     @Inject(method = "sendInitialRecipeBook", at = @At("HEAD"), cancellable = true)
     public void onSendInitial(ServerPlayer player, CallbackInfo ci) {
-        if (ConfigRegistry.GENERAL.getButtonMode() == NERBConfig.ButtonMode.DISCOVERED)
+        if (ConfigRegistry.SERVER.getRecipeBookMode() != NERBServerConfig.RecipeBookMode.DISABLED)
             return;
 
         var book = (ServerRecipeBook) (Object) this;
@@ -39,7 +39,7 @@ public class ServerRecipeBookMixin {
 
     @Inject(method = "loadUntrusted", at = @At("HEAD"), cancellable = true)
     public void onLoad(ServerRecipeBook.Packed packed, Predicate<ResourceKey<Recipe<?>>> predicate, CallbackInfo ci) {
-        if (ConfigRegistry.GENERAL.getButtonMode() != NERBConfig.ButtonMode.DISCOVERED)
+        if (ConfigRegistry.SERVER.getRecipeBookMode() == NERBServerConfig.RecipeBookMode.DISABLED)
             ci.cancel();
     }
 }
