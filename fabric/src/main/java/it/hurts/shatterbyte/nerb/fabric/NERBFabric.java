@@ -6,7 +6,6 @@ import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
 
 public final class NERBFabric implements ClientModInitializer, DedicatedServerModInitializer {
@@ -32,8 +31,5 @@ public final class NERBFabric implements ClientModInitializer, DedicatedServerMo
         ConfigRegistry.SERVER.load(configDirectory);
 
         CraftingManagerCompat.setupCommon(loader::isModLoaded);
-
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
-                NERB.onPlayerJoin(handler.player));
     }
 }
