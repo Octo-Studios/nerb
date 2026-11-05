@@ -26,6 +26,6 @@
     "fabric-api": "*",
     "minecraft": "~${minecraft_version}",
     "java": ">=${java_version}",
-    "shatterlib": "*"
+    "shatterlib": ">=0.7.0-beta.3"
   }
 }
