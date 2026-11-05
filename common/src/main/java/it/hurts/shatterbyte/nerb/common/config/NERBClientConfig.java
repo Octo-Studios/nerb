@@ -14,7 +14,7 @@ public class NERBClientConfig extends ShatterConfig {
             TOGGLE: Makes the recipe book button toggle the visibility of the JEI/REI UI instead of opening the recipe book. Disables client-side recipe book processing. If neither JEI nor REI is loaded, the button is hidden.
             RECIPE_BOOK: Retains the recipe book button and its default functionality, including client-side recipe book processing. The recipe book must also be enabled on the server.
             """)
-    private ButtonMode buttonMode = ButtonMode.TOGGLE;
+    private ButtonMode buttonMode = ButtonMode.HIDDEN;
 
     @Override
     public String getName() {
