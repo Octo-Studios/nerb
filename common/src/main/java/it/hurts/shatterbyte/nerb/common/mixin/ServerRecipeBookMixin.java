@@ -39,7 +39,7 @@ public class ServerRecipeBookMixin {
 
     @Inject(method = "loadUntrusted", at = @At("HEAD"), cancellable = true)
     public void onLoad(ServerRecipeBook.Packed packed, Predicate<ResourceKey<Recipe<?>>> predicate, CallbackInfo ci) {
-        if (ConfigRegistry.SERVER.getRecipeBookMode() == NERBServerConfig.RecipeBookMode.DISABLED)
+        if (ConfigRegistry.SERVER.getRecipeBookMode() == NERBServerConfig.RecipeBookMode.DISABLED && ConfigRegistry.SERVER.isClearRecipeBookData())
             ci.cancel();
     }
 }
