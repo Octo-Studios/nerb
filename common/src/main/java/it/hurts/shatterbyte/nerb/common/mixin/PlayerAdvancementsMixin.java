@@ -1,7 +1,5 @@
 package it.hurts.shatterbyte.nerb.common.mixin;
 
-import it.hurts.shatterbyte.nerb.common.config.NERBServerConfig;
-import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.PlayerAdvancements;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,9 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerAdvancementsMixin {
     @Inject(method = "registerListeners(Lnet/minecraft/advancements/AdvancementHolder;)V", at = @At("HEAD"), cancellable = true)
     private void onRegisterListeners(AdvancementHolder holder, CallbackInfo ci) {
-        if (ConfigRegistry.SERVER.getRecipeBookMode() != NERBServerConfig.RecipeBookMode.DISABLED)
-            return;
-
         var advancement = holder.value();
         var rewards = advancement.rewards();
 
