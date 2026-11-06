@@ -1,16 +1,16 @@
 package it.hurts.shatterbyte.nerb.common.config;
 
-import it.hurts.octostudios.octolib.module.config.annotation.Prop;
-import it.hurts.octostudios.octolib.module.config.impl.ConfigSide;
-import it.hurts.octostudios.octolib.module.config.impl.OctoConfig;
+import it.hurts.octostudios.octolib.modules.config.annotations.Prop;
+import it.hurts.octostudios.octolib.modules.config.impl.ConfigSide;
+import it.hurts.octostudios.octolib.modules.config.impl.OctoConfig;
 import lombok.Data;
 
 @Data
 public class NERBServerConfig implements OctoConfig {
     @Prop(comment = """
             Recipe Book mode:
-            DISABLED: Disables recipe unlocking and recipe book synchronization. Skips saved recipe book loading when clearRecipeBookData is enabled. Skips advancement listeners used only to unlock recipes. Recipe data required for crafting and recipe viewers is still synchronized.
-            DISCOVERED: Automatically unlocks all recipes for each player when they join and after data pack reloads. Otherwise retains the default server-side recipe book behavior without optimizations.
+            DISABLED: Disables recipe book data preparation, recipe unlocking, and recipe synchronization. Skips saved recipe book loading when clearRecipeBookData is enabled. Skips advancement listeners used only to unlock recipes.
+            DISCOVERED: Keeps all recipes unlocked and synchronizes them on join and after data pack reloads. Reduces server load by skipping individual recipe unlock tracking while preserving book settings.
             """)
     private RecipeBookMode recipeBookMode = RecipeBookMode.DISABLED;
 
