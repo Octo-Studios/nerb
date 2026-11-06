@@ -1,5 +1,6 @@
 package it.hurts.shatterbyte.nerb.common.compat.craftingmanager;
 
+import it.hurts.shatterbyte.nerb.common.compat.craftingmanager.impl.EMIEntry;
 import it.hurts.shatterbyte.nerb.common.compat.craftingmanager.impl.JEIEntry;
 import it.hurts.shatterbyte.nerb.common.compat.craftingmanager.impl.REIEntry;
 import it.hurts.shatterbyte.nerb.common.compat.craftingmanager.impl.base.ICMEntry;
@@ -18,8 +19,12 @@ public class CraftingManagerCompat {
         return ENTRIES.containsKey("roughlyenoughitems");
     }
 
+    public static boolean isEMILoaded() {
+        return ENTRIES.containsKey("emi");
+    }
+
     public static boolean isAnyLoaded() {
-        return isJEILoaded() || isREILoaded();
+        return isJEILoaded() || isREILoaded() || isEMILoaded();
     }
 
     public static void setupCommon(Predicate<String> isModLoaded) {
@@ -28,5 +33,8 @@ public class CraftingManagerCompat {
 
         if (isModLoaded.test("roughlyenoughitems"))
             ENTRIES.put("roughlyenoughitems", new REIEntry());
+
+        if (isModLoaded.test("emi"))
+            ENTRIES.put("emi", new EMIEntry());
     }
 }

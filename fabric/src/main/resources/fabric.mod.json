@@ -20,10 +20,10 @@
   ],
   "depends": {
     "fabricloader": ">=0.18.4",
-    "minecraft": "~1.21.11",
+    "minecraft": "1.21.1",
     "java": ">=21",
-    "architectury": ">=19.0.1",
-    "shatterlib": ">=0.6.0.8",
+    "architectury": ">=13.0.6",
+    "octolib": ">=0.6.2",
     "fabric-api": "*"
   }
 }

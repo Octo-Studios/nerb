@@ -7,12 +7,14 @@
     "ButtonMixin",
     "ClientPacketListenerMixin",
     "ClientRecipeBookMixin",
+    "ContainerEventHandlerMixin",
     "RecipeBookComponentMixin",
-    "ScreenMixin"
+    "ScreenMixin",
+    "compat.emi.EMISidebarPanelMixin",
+    "compat.emi.EMIScreenManagerMixin"
   ],
   "mixins": [
     "PlayerAdvancementsMixin",
-    "RecipeManagerMixin",
     "ServerPlayerMixin",
     "ServerRecipeBookMixin"
   ],

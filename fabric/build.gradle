@@ -29,11 +29,13 @@ dependencies {
 
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    modImplementation "it.hurts.shatterbyte.shatterlib:shatterlib-fabric:$rootProject.shatterlib_version"
+    modImplementation "it.hurts.octostudios.octolib:octolib-fabric:$rootProject.octolib_version"
 
     modCompileOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}") { transitive false }
     modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}") { transitive false }
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}"
+    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
