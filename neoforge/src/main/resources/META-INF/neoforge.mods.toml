@@ -16,20 +16,20 @@ description = "${mod_description}"
 [[dependencies.${mod_id}]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.11,)"
+versionRange = "[21.11.30-beta,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.11,)"
+versionRange = "[1.21.11,1.22)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
 modId = "shatterlib"
-type="required"
-versionRange = "[0.6.0.5,)"
+type = "required"
+versionRange = "[0.6.0.8,)"
 ordering = "NONE"
 side = "BOTH"

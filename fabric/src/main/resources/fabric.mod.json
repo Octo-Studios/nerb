@@ -9,6 +9,7 @@
   ],
   "license": "${mod_license}",
   "environment": "*",
+  "accessWidener": "${mod_id}.accesswidener",
   "entrypoints": {
     "main": [
       "${mod_group}.fabric.NERBFabric"
@@ -18,14 +19,11 @@
     "${mod_id}-common.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.11",
-    "minecraft": ">=1.21.11",
+    "fabricloader": ">=0.18.4",
+    "minecraft": "~1.21.11",
     "java": ">=21",
-    "architectury": ">=13.0.2",
-    "shatterlib": ">=0.6.0.5",
+    "architectury": ">=19.0.1",
+    "shatterlib": ">=0.6.0.8",
     "fabric-api": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }
