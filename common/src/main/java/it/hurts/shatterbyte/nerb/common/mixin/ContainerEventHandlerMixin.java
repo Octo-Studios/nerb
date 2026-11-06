@@ -1,0 +1,21 @@
+package it.hurts.shatterbyte.nerb.common.mixin;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import it.hurts.shatterbyte.nerb.common.config.NERBClientConfig;
+import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.events.ContainerEventHandler;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+@Mixin(ContainerEventHandler.class)
+public interface ContainerEventHandlerMixin {
+    @WrapOperation(method = "mouseClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/events/GuiEventListener;mouseClicked(DDI)Z"))
+    private boolean onMouseClicked(GuiEventListener widget, double mouseX, double mouseY, int button, Operation<Boolean> original) {
+        return original.call(widget, mouseX, mouseY, button) && !(widget instanceof ImageButton image && ConfigRegistry.CLIENT.getButtonMode() != NERBClientConfig.ButtonMode.RECIPE_BOOK
+                && image.sprites != null && image.sprites.equals(RecipeBookComponent.RECIPE_BUTTON_SPRITES));
+    }
+}

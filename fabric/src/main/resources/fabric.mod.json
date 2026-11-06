@@ -9,6 +9,7 @@
   ],
   "license": "${mod_license}",
   "environment": "*",
+  "accessWidener": "${mod_id}.accesswidener",
   "entrypoints": {
     "main": [
       "${mod_group}.fabric.NERBFabric"
@@ -18,8 +19,8 @@
     "${mod_id}-common.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.13",
-    "minecraft": ">=1.21.4",
+    "fabricloader": ">=0.18.4",
+    "minecraft": "1.21.4",
     "java": ">=21",
     "architectury": ">=15.0.3",
     "octolib": ">=0.5.0.1",

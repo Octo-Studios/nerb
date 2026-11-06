@@ -1,7 +1,7 @@
 plugins {
-    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.13.469' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'com.gradleup.shadow' version '8.3.6' apply false
 }
 
 architectury {
@@ -19,13 +19,13 @@ subprojects {
     apply plugin: 'maven-publish'
 
     base {
-        archivesName = "$rootProject.mod_name" + "-" + "$project.name".toUpperCase()
+        archivesName = "${mod_id}-${project.name}"
     }
 
     repositories {
         maven {
-            name = "OctoStudios"
-            url = uri("https://maven.octo-studios.com/releases")
+            name = "Shatterbyte"
+            url = uri("https://maven.shatterbyte.com/releases")
         }
         maven {
             name = "Jared's maven"
@@ -49,11 +49,6 @@ subprojects {
 
         compileOnly 'org.projectlombok:lombok:1.18.32'
         annotationProcessor 'org.projectlombok:lombok:1.18.32'
-
-        testCompileOnly 'org.projectlombok:lombok:1.18.32'
-        testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
-
-        implementation 'org.jetbrains:annotations:20.1.0'
     }
 
     java {
@@ -67,29 +62,25 @@ subprojects {
         it.options.release = 21
     }
 
-    tasks.register('collectJars', Copy) {
-        subprojects {
-            def ignoredProjects = ['common'];
-
-            if (!ignoredProjects.contains(project.name)) {
-                def remapJar = project.tasks.named('remapJar')
-
-                dependsOn remapJar
-                from remapJar
-                into 'build/libs'
-            }
+    jar {
+        manifest {
+            attributes([
+                    'Specification-Title'   : mod_name,
+                    'Specification-Vendor'  : mod_authors,
+                    'Specification-Version' : project.version,
+                    'Implementation-Title'  : project.name,
+                    'Implementation-Version': project.version,
+                    'Implementation-Vendor' : mod_authors,
+                    'Built-On-Minecraft'    : minecraft_version
+            ])
         }
-    }
-
-    assemble {
-        dependsOn(collectJars)
     }
 
     publishing {
         repositories {
             maven {
-                name = "octo"
-                url = "https://maven.octo-studios.com/releases"
+                name = "shatterbyte"
+                url = "https://maven.shatterbyte.com/releases"
                 credentials(PasswordCredentials)
                 authentication {
                     basic(BasicAuthentication)
@@ -98,9 +89,7 @@ subprojects {
         }
         publications {
             maven(MavenPublication) {
-                groupId = group
                 artifactId = project.mod_id + "-" + project.name
-                version = version
                 from components.java
             }
         }
