@@ -10,7 +10,7 @@ public class NERBServerConfig implements OctoConfig {
     @Prop(comment = """
             Recipe Book mode:
             DISABLED: Disables recipe book data preparation, recipe unlocking, and recipe synchronization. Skips saved recipe book loading when clearRecipeBookData is enabled. Skips advancement listeners used only to unlock recipes.
-            DISCOVERED: Automatically unlocks all recipes for each player when they join and after data pack reloads. Otherwise retains the default server-side recipe book behavior without optimizations.
+            DISCOVERED: Keeps all recipes unlocked and synchronizes them on join and after data pack reloads. Reduces server load by skipping individual recipe unlock tracking while preserving book settings.
             """)
     private RecipeBookMode recipeBookMode = RecipeBookMode.DISABLED;
 
