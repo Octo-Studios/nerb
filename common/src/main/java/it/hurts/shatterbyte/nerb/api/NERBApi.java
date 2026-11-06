@@ -14,6 +14,6 @@ public final class NERBApi {
     }
 
     public static boolean isServerRecipeBookDisabled() {
-        return ConfigRegistry.SERVER.getRecipeBookMode() == NERBServerConfig.RecipeBookMode.DISABLED;
+        return ConfigRegistry.SERVER.getRecipeBookMode() == NERBServerConfig.RecipeBookMode.DISABLED && ConfigRegistry.SERVER.getRecipeWhitelist().isEmpty();
     }
 }
