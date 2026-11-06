@@ -31,17 +31,16 @@ dependencies {
 
     modImplementation "it.hurts.shatterbyte.shatterlib:shatterlib-fabric:$rootProject.shatterlib_version"
 
-    //modImplementation "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
-    //modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
-    //modImplementation "dev.emi:emi-fabric:${emi_version}"
+    modCompileOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}") { transitive false }
+    modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}") { transitive false }
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }
 
-def resourceTargets = ['fabric.mod.json']
 def replaceProperties = [
-        mod_version: mod_version, mod_group: mod_group, mod_name: mod_name,
+        mod_version: project.version, mod_group: mod_group, mod_name: mod_name,
         mod_id     : mod_id, mod_description: mod_description, mod_authors: mod_authors,
         mod_license: mod_license, mod_tracker: mod_tracker
 ]
@@ -49,9 +48,13 @@ def replaceProperties = [
 processResources {
     inputs.properties replaceProperties
 
-    filesMatching(resourceTargets) {
+    filesMatching('fabric.mod.json') {
         expand replaceProperties
     }
+}
+
+sourcesJar {
+    from project(':common').sourceSets.main.allSource
 }
 
 shadowJar {
