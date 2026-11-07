@@ -1,24 +1,35 @@
 package it.hurts.shatterbyte.nerb.common.config;
 
-import it.hurts.octostudios.octolib.module.config.annotation.Prop;
-import it.hurts.octostudios.octolib.module.config.impl.ConfigSide;
-import it.hurts.octostudios.octolib.module.config.impl.OctoConfig;
-import lombok.Data;
+import it.hurts.shatterbyte.shatterlib.module.config.ConfigSide;
+import it.hurts.shatterbyte.shatterlib.module.config.ShatterConfig;
+import it.hurts.shatterbyte.shatterlib.module.config.type.annotation.Comment;
+import lombok.Getter;
 
-@Data
-public class NERBClientConfig implements OctoConfig {
-    @Prop(comment = """
-            Recipe Book button mode:
-            HIDDEN: Removes the recipe book button and disables client-side recipe book processing.
-            INACTIVE: Retains the recipe book button, but disables its default functionality and client-side recipe book processing.
-            TOGGLE: Makes the recipe book button toggle the visibility of the JEI/REI/EMI UI instead of opening the recipe book. Disables client-side recipe book processing. If none of these mods is loaded, the button is hidden. EMI sidebars are configured in nerb/compat/emi.
-            RECIPE_BOOK: Retains the recipe book button and its default functionality, including client-side recipe book processing. Takes precedence over EMI's recipe book button action. The recipe book must also be enabled on the server.
+@Getter
+public class NERBClientConfig extends ShatterConfig {
+    @Comment("""
+            Controls the vanilla recipe book button on this client:
+            HIDDEN: Hides the button completely.
+            INACTIVE: Leaves the button visible, but clicking it does nothing.
+            TOGGLE: Clicking the button shows or hides the installed JEI/REI interfaces. If neither mod is installed, the button is hidden.
+            RECIPE_BOOK: Opens the normal vanilla recipe book. On servers running NERB, recipes must be enabled with DISCOVERED or recipeWhitelist.
+            HIDDEN, INACTIVE and TOGGLE also turn off the vanilla book and skip its recipe updates to reduce client load.
             """)
     private ButtonMode buttonMode = ButtonMode.HIDDEN;
 
     @Override
+    public String getName() {
+        return "nerb";
+    }
+
+    @Override
     public ConfigSide getSide() {
         return ConfigSide.CLIENT;
+    }
+
+    @Override
+    public int getSchemaVersion() {
+        return 1;
     }
 
     public enum ButtonMode {

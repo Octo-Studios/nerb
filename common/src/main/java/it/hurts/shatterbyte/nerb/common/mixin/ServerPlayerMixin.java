@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
+import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import it.hurts.shatterbyte.nerb.common.recipebook.RecipeBookRules;
 import it.hurts.shatterbyte.nerb.common.recipebook.RecipeManagerAccess;
 import it.hurts.shatterbyte.nerb.common.recipebook.ServerRecipeBookAccess;
@@ -14,6 +15,8 @@ import net.minecraft.stats.RecipeBookSettings;
 import net.minecraft.stats.ServerRecipeBook;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,6 +38,9 @@ public class ServerPlayerMixin {
     @Unique
     private static final Codec<ServerRecipeBook.Packed> nerb$discoveredRecipeBookCodec = RecipeBookSettings.MAP_CODEC.codec()
             .xmap(settings -> new ServerRecipeBook.Packed(settings, List.of(), List.of()), ServerRecipeBook.Packed::settings);
+
+    @Unique
+    private static final Codec<List<ResourceKey<Recipe<?>>>> nerb$removedRecipesCodec = Recipe.KEY_CODEC.listOf();
 
     @WrapOperation(method = "<init>", at = @At(value = "NEW", target = "net/minecraft/stats/ServerRecipeBook"))
     private ServerRecipeBook onCreateRecipeBook(ServerRecipeBook.DisplayResolver displayResolver, Operation<ServerRecipeBook> original) {
@@ -61,7 +67,23 @@ public class ServerPlayerMixin {
     private Codec<ServerRecipeBook.Packed> onRecipeBookCodec(Codec<ServerRecipeBook.Packed> original) {
         var rules = nerb$getRecipeBookRules();
 
-        return rules.isDiscoveredMode() && !rules.hasVanillaRecipes() ? nerb$discoveredRecipeBookCodec : original;
+        return rules.isDiscoveredMode() && ConfigRegistry.SERVER.isClearRecipeBookData() && !rules.hasVanillaRecipes() ? nerb$discoveredRecipeBookCodec : original;
+    }
+
+    @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+    private void onLoadRemovedRecipes(ValueInput input, CallbackInfo ci) {
+        var removedRecipes = ((ServerRecipeBookAccess) ((ServerPlayer) (Object) this).getRecipeBook()).nerb$getRemovedRecipes();
+
+        removedRecipes.clear();
+        input.read("nerb:removed_recipes", nerb$removedRecipesCodec).ifPresent(removedRecipes::addAll);
+    }
+
+    @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+    private void onSaveRemovedRecipes(ValueOutput output, CallbackInfo ci) {
+        var removedRecipes = ((ServerRecipeBookAccess) ((ServerPlayer) (Object) this).getRecipeBook()).nerb$getRemovedRecipes();
+
+        if (!removedRecipes.isEmpty())
+            output.store("nerb:removed_recipes", nerb$removedRecipesCodec, List.copyOf(removedRecipes));
     }
 
     @Unique

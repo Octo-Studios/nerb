@@ -11,28 +11,35 @@ import java.util.List;
 @Getter
 public class NERBServerConfig extends ShatterConfig {
     @Comment("""
-            Recipe Book mode, unless overridden by the lists below:
-            DISABLED: Disables recipe book data preparation, recipe unlocking, and recipe synchronization. Skips saved recipe book loading when clearRecipeBookData is enabled. Skips advancement listeners used only to unlock recipes.
-            DISCOVERED: Keeps all recipes unlocked and synchronizes them on join and after data pack reloads. Reduces server load by skipping individual recipe unlock tracking while preserving book settings.
+            Controls the vanilla recipe book on the server. The lists below override this choice.
+            DISABLED: Stops recipe unlocking and sending recipes to the book, except for recipeWhitelist. Skips recipe book work for other recipes to reduce server load.
+            DISCOVERED: Makes recipes immediately available in the book without tracking each automatic unlock as player progress. Whitelisted recipes unlock normally; blacklisted recipes stay hidden.
+            With NERB on the client, buttonMode must be RECIPE_BOOK to open the book and see these recipes.
             """)
     private RecipeBookMode recipeBookMode = RecipeBookMode.DISABLED;
 
     @Comment("""
-            Recipes that bypass NERB and follow normal vanilla unlocking rules, even in DISABLED. Takes priority over recipeBlacklist.
-            Accepts recipe IDs (minecraft:stick) and regular expressions matching the full ID (regex:minecraft:.*_planks).
+            Recipes that bypass NERB: they unlock through normal gameplay, and their unlock progress is always saved.
+            In both DISABLED and DISCOVERED, players must unlock these recipes normally before they appear in the book.
+            Matches recipe IDs, which can differ from item IDs. Use minecraft:stick for one recipe or regex:minecraft:.*_planks for vanilla recipes whose IDs end in _planks.
+            Regex patterns match the entire namespace:path ID. Whitelist takes priority over recipeBlacklist. An empty list means no exceptions.
             """)
     private List<String> recipeWhitelist = new ArrayList<>();
 
     @Comment("""
-            Recipes to disable in the recipe book, even in DISCOVERED. Whitelisted recipes take priority.
-            Accepts recipe IDs (minecraft:stick) and regular expressions matching the full ID (regex:minecraft:.*_planks).
+            Recipes to keep hidden from the vanilla book, even in DISCOVERED. Normal unlocking of these recipes is also skipped.
+            The recipes themselves remain in the game. This list does not filter JEI/REI interfaces.
+            Uses the same recipe ID and regex syntax as recipeWhitelist. Whitelist takes priority. An empty list adds no restrictions beyond recipeBookMode.
             """)
     private List<String> recipeBlacklist = new ArrayList<>();
 
     @Comment("""
-            Only applies when recipeBookMode is DISABLED.
-            true: Clears saved recipe progress except for whitelisted recipes. Book settings are also cleared when no whitelisted recipes are available.
-            false: Preserves existing recipe book data. Only whitelisted recipes are synchronized to the client.
+            Controls saved recipe progress: the recipes a player has unlocked and those marked as new in the book.
+            true: Removes progress outside recipeWhitelist from the player's data when the player is next saved.
+            false: Keeps existing progress for later use without NERB. Recipes automatically unlocked by DISCOVERED are not added to it.
+            Book settings mean whether the recipe panel is open and whether it shows only recipes the player currently has ingredients for.
+            These settings are saved per recipe book type, including modded types that use Minecraft's recipe book settings.
+            Settings are always kept in DISCOVERED. In DISABLED, true resets them if no loaded recipe matches recipeWhitelist, even if the list contains entries.
             """)
     private boolean clearRecipeBookData = true;
 
