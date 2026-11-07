@@ -8,11 +8,12 @@ import lombok.Getter;
 @Getter
 public class NERBClientConfig extends ShatterConfig {
     @Comment("""
-            Recipe Book button mode:
-            HIDDEN: Removes the recipe book button and disables client-side recipe book processing.
-            INACTIVE: Retains the recipe book button, but disables its default functionality and client-side recipe book processing.
-            TOGGLE: Makes the recipe book button toggle the visibility of the JEI/REI UI instead of opening the recipe book. Disables client-side recipe book processing. If neither JEI nor REI is loaded, the button is hidden.
-            RECIPE_BOOK: Retains the recipe book button and its default functionality, including client-side recipe book processing. The recipe book must also be enabled on the server.
+            Controls the vanilla recipe book button on this client:
+            HIDDEN: Hides the button completely.
+            INACTIVE: Leaves the button visible, but clicking it does nothing.
+            TOGGLE: Clicking the button shows or hides the installed JEI/REI interfaces. If neither mod is installed, the button is hidden.
+            RECIPE_BOOK: Opens the normal vanilla recipe book. On servers running NERB, recipes must be enabled with DISCOVERED or recipeWhitelist.
+            HIDDEN, INACTIVE and TOGGLE also turn off the vanilla book and skip its recipe updates to reduce client load.
             """)
     private ButtonMode buttonMode = ButtonMode.HIDDEN;
 
