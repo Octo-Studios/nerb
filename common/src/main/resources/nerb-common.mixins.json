@@ -11,6 +11,8 @@
     "ScreenMixin"
   ],
   "mixins": [
+    "ConfigManagerMixin",
+    "PlayerAdvancementsAccessor",
     "PlayerAdvancementsMixin",
     "RecipeManagerMixin",
     "ServerPlayerMixin",
