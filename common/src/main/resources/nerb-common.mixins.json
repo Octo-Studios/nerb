@@ -12,7 +12,6 @@
   ],
   "mixins": [
     "PlayerAdvancementsMixin",
-    "RecipeManagerMixin",
     "ServerPlayerMixin",
     "ServerRecipeBookMixin"
   ],

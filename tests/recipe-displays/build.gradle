@@ -1,0 +1,8 @@
+plugins { id 'java-library'; id 'net.neoforged.moddev' version '2.0.148' }
+version = '1.0.0'
+java { toolchain.languageVersion = JavaLanguageVersion.of(25) }
+neoForge {
+    version = '26.1.2.126'
+    mods { nerb_recipe_display_test { sourceSet sourceSets.main } }
+    runs { server { server() } }
+}

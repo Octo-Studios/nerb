@@ -9,7 +9,7 @@ import lombok.Getter;
 public class NERBServerConfig extends ShatterConfig {
     @Comment("""
             Recipe Book mode:
-            DISABLED: Disables recipe book data preparation, recipe unlocking, and recipe synchronization. Skips saved recipe book loading when clearRecipeBookData is enabled. Skips advancement listeners used only to unlock recipes.
+            DISABLED: Disables recipe unlocking and recipe synchronization. Shared recipe display data remains available to other mods. Skips saved recipe book loading when clearRecipeBookData is enabled. Skips advancement listeners used only to unlock recipes.
             DISCOVERED: Automatically unlocks all recipes for each player when they join and after data pack reloads. Otherwise retains the default server-side recipe book behavior without optimizations.
             """)
     private RecipeBookMode recipeBookMode = RecipeBookMode.DISABLED;
