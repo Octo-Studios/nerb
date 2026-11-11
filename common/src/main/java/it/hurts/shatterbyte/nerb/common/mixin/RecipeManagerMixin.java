@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin implements RecipeManagerAccess {
@@ -28,18 +27,15 @@ public class RecipeManagerMixin implements RecipeManagerAccess {
     private List<RecipeManager.ServerDisplayInfo> onUnpackRecipeInfo(Iterable<RecipeHolder<?>> recipes, FeatureFlagSet enabledFeatures, Operation<List<RecipeManager.ServerDisplayInfo>> original) {
         nerb$recipeBookRules = new RecipeBookRules(recipes, ConfigRegistry.SERVER);
 
-        if (!nerb$recipeBookRules.isDiscoveredMode() && !nerb$recipeBookRules.hasVanillaRecipes())
-            return List.of();
+        var displays = original.call(recipes, enabledFeatures);
 
-        var enabledRecipes = StreamSupport.stream(recipes.spliterator(), false)
-                .filter(recipe -> nerb$recipeBookRules.isEnabled(recipe.id()))
-                .toList();
-        var displays = original.call(enabledRecipes, enabledFeatures);
-
-        nerb$discoveredRecipes = new ClientboundRecipeBookAddPacket(displays.stream()
-                .filter(display -> !display.parent().value().isSpecial() && nerb$recipeBookRules.isDiscovered(display.parent().id()))
-                .map(display -> new ClientboundRecipeBookAddPacket.Entry(display.display(), false, false))
-                .toList(), !nerb$recipeBookRules.hasVanillaRecipes());
+        if (nerb$recipeBookRules.isDiscoveredMode())
+            nerb$discoveredRecipes = new ClientboundRecipeBookAddPacket(displays.stream()
+                    .filter(display -> !display.parent().value().isSpecial() && nerb$recipeBookRules.isDiscovered(display.parent().id()))
+                    .map(display -> new ClientboundRecipeBookAddPacket.Entry(display.display(), false, false))
+                    .toList(), !nerb$recipeBookRules.hasVanillaRecipes());
+        else
+            nerb$discoveredRecipes = null;
 
         return displays;
     }
