@@ -1,13 +1,13 @@
 package it.hurts.shatterbyte.nerb.common.config;
 
-import it.hurts.shatterbyte.shatterlib.module.config.ConfigSide;
-import it.hurts.shatterbyte.shatterlib.module.config.ShatterConfig;
-import it.hurts.shatterbyte.shatterlib.module.config.type.annotation.Comment;
-import lombok.Getter;
+import it.hurts.shatterbyte.shatterlib.module.config.annotation.Prop;
+import it.hurts.shatterbyte.shatterlib.module.config.impl.ConfigSide;
+import it.hurts.shatterbyte.shatterlib.module.config.impl.ShatterConfig;
+import lombok.Data;
 
-@Getter
-public class NERBClientConfig extends ShatterConfig {
-    @Comment("""
+@Data
+public class NERBClientConfig implements ShatterConfig {
+    @Prop(comment = """
             Controls the vanilla recipe book button on this client:
             HIDDEN: Hides the button completely.
             INACTIVE: Leaves the button visible, but clicking it does nothing.
@@ -18,18 +18,8 @@ public class NERBClientConfig extends ShatterConfig {
     private ButtonMode buttonMode = ButtonMode.HIDDEN;
 
     @Override
-    public String getName() {
-        return "nerb";
-    }
-
-    @Override
     public ConfigSide getSide() {
         return ConfigSide.CLIENT;
-    }
-
-    @Override
-    public int getSchemaVersion() {
-        return 1;
     }
 
     public enum ButtonMode {
