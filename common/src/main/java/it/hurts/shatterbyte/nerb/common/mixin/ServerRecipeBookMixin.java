@@ -137,8 +137,8 @@ public class ServerRecipeBookMixin implements ServerRecipeBookAccess {
             player.connection.send(new ClientboundRecipeBookAddPacket(List.of(), true));
     }
 
-    @WrapOperation(method = "sendInitialRecipeBook", at = @At(value = "INVOKE", target = "Lnet/minecraft/stats/ServerRecipeBook$DisplayResolver;displaysForRecipe(Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Consumer;)V"))
-    private void onSendKnownRecipe(ServerRecipeBook.DisplayResolver resolver, ResourceKey<Recipe<?>> recipe, Consumer<RecipeDisplayEntry> output, Operation<Void> original) {
+    @WrapOperation(method = {"sendInitialRecipeBook", "removeRecipes"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/stats/ServerRecipeBook$DisplayResolver;displaysForRecipe(Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Consumer;)V"))
+    private void onResolveVanillaDisplays(ServerRecipeBook.DisplayResolver resolver, ResourceKey<Recipe<?>> recipe, Consumer<RecipeDisplayEntry> output, Operation<Void> original) {
         if (nerb$getRecipeBookRules().isVanilla(recipe))
             original.call(resolver, recipe, output);
     }
