@@ -25,7 +25,7 @@ public class ConfigRegistry {
         for (var player : server.getPlayerList().getPlayers()) {
             var advancements = player.getAdvancements();
 
-            advancements.clearTriggers();
+            advancements.stopListening();
             ((PlayerAdvancementsAccessor) advancements).nerb$registerListeners(server.getAdvancements());
             player.getRecipeBook().sendInitialRecipeBook(player);
         }
