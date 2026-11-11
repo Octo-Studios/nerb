@@ -9,6 +9,8 @@ import it.hurts.shatterbyte.shatterlib.module.config.ConfigManager;
 import net.minecraft.server.MinecraftServer;
 
 public class ConfigRegistry {
+    public static final String SERVER_PATH = "nerb/server";
+
     public static NERBClientConfig CLIENT = new NERBClientConfig();
     public static NERBServerConfig SERVER = new NERBServerConfig();
 
@@ -16,7 +18,7 @@ public class ConfigRegistry {
         if (Platform.getEnvironment() == Env.CLIENT)
             ConfigManager.registerConfig("nerb/client", CLIENT);
 
-        ConfigManager.registerConfig("nerb/server", SERVER);
+        ConfigManager.registerConfig(SERVER_PATH, SERVER);
     }
 
     public static void reloadRecipeBook(MinecraftServer server) {
