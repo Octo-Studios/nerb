@@ -1,12 +1,12 @@
 package it.hurts.shatterbyte.nerb.common.config;
 
-import it.hurts.shatterbyte.shatterlib.module.config.annotation.Prop;
-import it.hurts.shatterbyte.shatterlib.module.config.impl.ConfigSide;
-import it.hurts.shatterbyte.shatterlib.module.config.impl.ShatterConfig;
+import it.hurts.octostudios.octolib.modules.config.annotations.Prop;
+import it.hurts.octostudios.octolib.modules.config.impl.ConfigSide;
+import it.hurts.octostudios.octolib.modules.config.impl.OctoConfig;
 import lombok.Data;
 
 @Data
-public class NERBClientConfig implements ShatterConfig {
+public class NERBClientConfig implements OctoConfig {
     @Prop(comment = """
             Controls the vanilla recipe book button on this client:
             HIDDEN: Hides the button completely.

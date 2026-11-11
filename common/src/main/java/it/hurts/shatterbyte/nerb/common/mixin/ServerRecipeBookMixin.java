@@ -7,6 +7,7 @@ import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import it.hurts.shatterbyte.nerb.common.recipebook.RecipeBookRules;
 import it.hurts.shatterbyte.nerb.common.recipebook.RecipeManagerAccess;
 import it.hurts.shatterbyte.nerb.common.recipebook.ServerRecipeBookAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket;
 import net.minecraft.network.protocol.game.ClientboundRecipeBookSettingsPacket;
 import net.minecraft.resources.ResourceKey;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -143,38 +145,31 @@ public class ServerRecipeBookMixin implements ServerRecipeBookAccess {
             original.call(resolver, recipe, output);
     }
 
-    @Inject(method = "pack", at = @At("HEAD"), cancellable = true)
-    private void onPack(CallbackInfoReturnable<ServerRecipeBook.Packed> cir) {
-        var rules = nerb$getRecipeBookRules();
-
-        if (!rules.isDiscoveredMode() || !ConfigRegistry.SERVER.isClearRecipeBookData() || rules.hasVanillaRecipes())
+    @Inject(method = "fromNbt", at = @At("HEAD"), cancellable = true)
+    private void onLoad(CompoundTag tag, Predicate<ResourceKey<Recipe<?>>> predicate, CallbackInfo ci) {
+        if (!ConfigRegistry.SERVER.isClearRecipeBookData())
             return;
 
-        var book = (ServerRecipeBook) (Object) this;
+        var rules = nerb$getRecipeBookRules();
+        if (rules.hasVanillaRecipes())
+            return;
 
-        cir.setReturnValue(new ServerRecipeBook.Packed(book.getBookSettings().copy(), List.of(), List.of()));
+        if (rules.isDiscoveredMode())
+            ((ServerRecipeBook) (Object) this).setBookSettings(RecipeBookSettings.read(tag));
+
+        ci.cancel();
     }
 
-    @WrapMethod(method = "loadUntrusted")
-    private void onLoad(ServerRecipeBook.Packed packed, Predicate<ResourceKey<Recipe<?>>> predicate, Operation<Void> original) {
+    @ModifyVariable(method = "loadRecipes", at = @At("HEAD"), argsOnly = true)
+    private Consumer<ResourceKey<Recipe<?>>> onLoadRecipes(Consumer<ResourceKey<Recipe<?>>> output) {
+        if (!ConfigRegistry.SERVER.isClearRecipeBookData())
+            return output;
+
         var rules = nerb$getRecipeBookRules();
-
-        if (!ConfigRegistry.SERVER.isClearRecipeBookData()) {
-            original.call(packed, predicate);
-
-            return;
-        }
-
-        if (!rules.hasVanillaRecipes()) {
-            if (rules.isDiscoveredMode())
-                ((ServerRecipeBook) (Object) this).setBookSettings(packed.settings());
-
-            return;
-        }
-
-        original.call(new ServerRecipeBook.Packed(packed.settings(),
-                packed.known().stream().filter(rules::isVanilla).toList(),
-                packed.highlight().stream().filter(rules::isVanilla).toList()), predicate);
+        return recipe -> {
+            if (rules.isVanilla(recipe))
+                output.accept(recipe);
+        };
     }
 
     @Unique
