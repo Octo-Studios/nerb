@@ -6,13 +6,13 @@ import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ConfigManager.class, remap = false)
 public class ConfigManagerMixin {
-    @Inject(method = "reload", at = @At("RETURN"))
-    private static void onReload(String path, MinecraftServer server, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue() && server != null && path.equals(ConfigRegistry.SERVER.getPath()))
+    @Inject(method = "syncConfig(Ljava/lang/String;Lnet/minecraft/server/MinecraftServer;)V", at = @At("RETURN"))
+    private static void onSyncConfig(String path, MinecraftServer server, CallbackInfo ci) {
+        if (path.equals(ConfigRegistry.SERVER_PATH))
             ConfigRegistry.reloadRecipeBook(server);
     }
 }

@@ -1,16 +1,16 @@
 package it.hurts.shatterbyte.nerb.common.config;
 
-import it.hurts.shatterbyte.shatterlib.module.config.ConfigSide;
-import it.hurts.shatterbyte.shatterlib.module.config.ShatterConfig;
-import it.hurts.shatterbyte.shatterlib.module.config.type.annotation.Comment;
-import lombok.Getter;
+import it.hurts.shatterbyte.shatterlib.module.config.annotation.Prop;
+import it.hurts.shatterbyte.shatterlib.module.config.impl.ConfigSide;
+import it.hurts.shatterbyte.shatterlib.module.config.impl.ShatterConfig;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-public class NERBServerConfig extends ShatterConfig {
-    @Comment("""
+@Data
+public class NERBServerConfig implements ShatterConfig {
+    @Prop(comment = """
             Controls the vanilla recipe book on the server. The lists below override this choice.
             DISABLED: Stops recipe unlocking and sending recipes to the book, except for recipeWhitelist. Skips recipe book work for other recipes to reduce server load.
             DISCOVERED: Makes recipes immediately available in the book without tracking each automatic unlock as player progress. Whitelisted recipes unlock normally; blacklisted recipes stay hidden.
@@ -18,7 +18,7 @@ public class NERBServerConfig extends ShatterConfig {
             """)
     private RecipeBookMode recipeBookMode = RecipeBookMode.DISABLED;
 
-    @Comment("""
+    @Prop(comment = """
             Recipes that bypass NERB: they unlock through normal gameplay, and their unlock progress is always saved.
             In both DISABLED and DISCOVERED, players must unlock these recipes normally before they appear in the book.
             Matches recipe IDs, which can differ from item IDs. Use minecraft:stick for one recipe or regex:minecraft:.*_planks for vanilla recipes whose IDs end in _planks.
@@ -26,14 +26,14 @@ public class NERBServerConfig extends ShatterConfig {
             """)
     private List<String> recipeWhitelist = new ArrayList<>();
 
-    @Comment("""
+    @Prop(comment = """
             Recipes to keep hidden from the vanilla book, even in DISCOVERED. Normal unlocking of these recipes is also skipped.
             The recipes themselves remain in the game. This list does not filter JEI/REI interfaces.
             Uses the same recipe ID and regex syntax as recipeWhitelist. Whitelist takes priority. An empty list adds no restrictions beyond recipeBookMode.
             """)
     private List<String> recipeBlacklist = new ArrayList<>();
 
-    @Comment("""
+    @Prop(comment = """
             Controls saved recipe progress: the recipes a player has unlocked and those marked as new in the book.
             true: Removes progress outside recipeWhitelist from the player's data when the player is next saved.
             false: Keeps existing progress for later use without NERB. Recipes automatically unlocked by DISCOVERED are not added to it.
@@ -44,18 +44,8 @@ public class NERBServerConfig extends ShatterConfig {
     private boolean clearRecipeBookData = true;
 
     @Override
-    public String getName() {
-        return "nerb";
-    }
-
-    @Override
     public ConfigSide getSide() {
         return ConfigSide.SERVER;
-    }
-
-    @Override
-    public int getSchemaVersion() {
-        return 1;
     }
 
     public enum RecipeBookMode {
