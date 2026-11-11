@@ -1,9 +1,10 @@
 package it.hurts.shatterbyte.nerb.common.recipebook;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 import it.hurts.shatterbyte.nerb.common.config.NERBServerConfig;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.slf4j.Logger;
 
@@ -19,8 +20,8 @@ public class RecipeBookRules {
 
     private final boolean discovered;
 
-    private final Set<ResourceKey<Recipe<?>>> whitelist = new HashSet<>();
-    private final Set<ResourceKey<Recipe<?>>> blacklist = new HashSet<>();
+    private final Set<ResourceLocation> whitelist = new HashSet<>();
+    private final ImmutableSet<ResourceLocation> discoveredRecipes;
 
     public RecipeBookRules(Iterable<RecipeHolder<?>> recipes, NERBServerConfig config) {
         discovered = config.getRecipeBookMode() == NERBServerConfig.RecipeBookMode.DISCOVERED;
@@ -28,17 +29,17 @@ public class RecipeBookRules {
         var whitelistPatterns = compilePatterns(config.getRecipeWhitelist());
         var blacklistPatterns = compilePatterns(config.getRecipeBlacklist());
 
-        if (whitelistPatterns.isEmpty() && blacklistPatterns.isEmpty())
-            return;
-
-        for (var recipe : recipes) {
-            var id = recipe.id().location().toString();
-
-            if (whitelistPatterns.stream().anyMatch(pattern -> pattern.matcher(id).matches()))
-                whitelist.add(recipe.id());
-            else if (blacklistPatterns.stream().anyMatch(pattern -> pattern.matcher(id).matches()))
-                blacklist.add(recipe.id());
+        var discoveredIds = ImmutableSet.<ResourceLocation>builder();
+        if (discovered || !whitelistPatterns.isEmpty()) {
+            for (var recipe : recipes) {
+                var id = recipe.id();
+                if (matches(whitelistPatterns, id))
+                    whitelist.add(id);
+                else if (discovered && !recipe.value().isSpecial() && !matches(blacklistPatterns, id))
+                    discoveredIds.add(id);
+            }
         }
+        discoveredRecipes = discoveredIds.build();
     }
 
     public boolean isDiscoveredMode() {
@@ -49,16 +50,24 @@ public class RecipeBookRules {
         return !whitelist.isEmpty();
     }
 
-    public boolean isVanilla(ResourceKey<Recipe<?>> recipe) {
+    public boolean isVanilla(ResourceLocation recipe) {
         return whitelist.contains(recipe);
     }
 
-    public boolean isDiscovered(ResourceKey<Recipe<?>> recipe) {
-        return discovered && !whitelist.contains(recipe) && !blacklist.contains(recipe);
+    public boolean isDiscovered(ResourceLocation recipe) {
+        return discoveredRecipes.contains(recipe);
     }
 
-    public boolean isEnabled(ResourceKey<Recipe<?>> recipe) {
-        return isVanilla(recipe) || isDiscovered(recipe);
+    public ImmutableList<ResourceLocation> discoveredRecipes() {
+        return discoveredRecipes.asList();
+    }
+
+    private static boolean matches(List<Pattern> patterns, ResourceLocation recipe) {
+        if (patterns.isEmpty())
+            return false;
+
+        var id = recipe.toString();
+        return patterns.stream().anyMatch(pattern -> pattern.matcher(id).matches());
     }
 
     private static List<Pattern> compilePatterns(List<String> entries) {

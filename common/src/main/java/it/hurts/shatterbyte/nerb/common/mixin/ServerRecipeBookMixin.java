@@ -1,55 +1,46 @@
 package it.hurts.shatterbyte.nerb.common.mixin;
 
+import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import it.hurts.shatterbyte.nerb.common.recipebook.RecipeBookRules;
 import it.hurts.shatterbyte.nerb.common.recipebook.RecipeManagerAccess;
 import it.hurts.shatterbyte.nerb.common.recipebook.ServerRecipeBookAccess;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket;
-import net.minecraft.network.protocol.game.ClientboundRecipeBookSettingsPacket;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.protocol.game.ClientboundRecipePacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.RecipeBook;
 import net.minecraft.stats.RecipeBookSettings;
 import net.minecraft.stats.ServerRecipeBook;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Mixin(ServerRecipeBook.class)
-public class ServerRecipeBookMixin implements ServerRecipeBookAccess {
-    @Shadow
-    @Final
-    protected Set<ResourceKey<Recipe<?>>> known;
-
-    @Shadow
-    @Final
-    protected Set<ResourceKey<Recipe<?>>> highlight;
-
+public class ServerRecipeBookMixin extends RecipeBook implements ServerRecipeBookAccess {
     @Unique
     private MinecraftServer nerb$server;
 
     @Unique
-    private final Set<ResourceKey<Recipe<?>>> nerb$removedRecipes = new HashSet<>();
+    private final Set<ResourceLocation> nerb$removedRecipes = new HashSet<>();
+
+    @Unique
+    private RecipeBookRules nerb$sentRules;
 
     @Override
     public void nerb$setServer(MinecraftServer server) {
@@ -57,25 +48,39 @@ public class ServerRecipeBookMixin implements ServerRecipeBookAccess {
     }
 
     @Override
-    public Set<ResourceKey<Recipe<?>>> nerb$getRemovedRecipes() {
+    public Set<ResourceLocation> nerb$getRemovedRecipes() {
         return nerb$removedRecipes;
     }
 
-    @Inject(method = "add", at = @At("HEAD"))
-    private void onAdd(ResourceKey<Recipe<?>> recipe, CallbackInfo ci) {
-        nerb$removedRecipes.remove(recipe);
+    @Override
+    public RecipeBookRules nerb$getSentRules() {
+        return nerb$sentRules;
     }
 
-    @Inject(method = "remove", at = @At("HEAD"))
-    private void onRemove(ResourceKey<Recipe<?>> recipe, CallbackInfo ci) {
+    @Override
+    protected void add(ResourceLocation recipe) {
+        nerb$removedRecipes.remove(recipe);
+        super.add(recipe);
+    }
+
+    @Override
+    protected void remove(ResourceLocation recipe) {
         if (known.contains(recipe))
             nerb$removedRecipes.add(recipe);
+
+        super.remove(recipe);
     }
 
-    @Inject(method = "copyOverData", at = @At("TAIL"))
-    private void onCopyOverData(ServerRecipeBook book, CallbackInfo ci) {
+    @Override
+    public void copyOverData(RecipeBook book) {
+        super.copyOverData(book);
+
         nerb$removedRecipes.clear();
-        nerb$removedRecipes.addAll(((ServerRecipeBookAccess) book).nerb$getRemovedRecipes());
+        nerb$sentRules = null;
+        if (book instanceof ServerRecipeBookAccess other) {
+            nerb$removedRecipes.addAll(other.nerb$getRemovedRecipes());
+            nerb$sentRules = other.nerb$getSentRules();
+        }
     }
 
     @WrapMethod(method = "addRecipes")
@@ -101,73 +106,94 @@ public class ServerRecipeBookMixin implements ServerRecipeBookAccess {
         return original.call(recipes.stream().filter(recipe -> rules.isVanilla(recipe.id())).toList(), player);
     }
 
-    @Inject(method = "contains", at = @At("HEAD"), cancellable = true)
-    private void onContains(ResourceKey<Recipe<?>> recipe, CallbackInfoReturnable<Boolean> cir) {
+    @Override
+    public boolean contains(RecipeHolder<?> recipe) {
+        return recipe != null && contains(recipe.id());
+    }
+
+    @Override
+    public boolean contains(ResourceLocation recipe) {
         var rules = nerb$getRecipeBookRules();
 
         if (rules.isDiscoveredMode() && !rules.isVanilla(recipe))
-            cir.setReturnValue(rules.isDiscovered(recipe));
+            return rules.isDiscovered(recipe);
+
+        return super.contains(recipe);
     }
 
-    @WrapMethod(method = "sendInitialRecipeBook")
-    private void onSendInitial(ServerPlayer player, Operation<Void> original) {
+    @Inject(method = "sendInitialRecipeBook", at = @At("HEAD"), cancellable = true)
+    private void onSendInitial(ServerPlayer player, CallbackInfo ci) {
         var rules = nerb$getRecipeBookRules();
+        nerb$removeStaleRecipes(player);
 
         if (ConfigRegistry.SERVER.isClearRecipeBookData()) {
             known.removeIf(recipe -> !rules.isVanilla(recipe));
             highlight.removeIf(recipe -> !rules.isVanilla(recipe));
 
             if (!rules.isDiscoveredMode() && !rules.hasVanillaRecipes())
-                ((ServerRecipeBook) (Object) this).setBookSettings(new RecipeBookSettings());
+                setBookSettings(new RecipeBookSettings());
         }
 
+        var recipes = rules.discoveredRecipes();
+        var highlights = List.<ResourceLocation>of();
         if (rules.hasVanillaRecipes()) {
             for (var advancement : nerb$server.getAdvancements().getAllAdvancements()) {
-                var recipes = advancement.value().rewards().recipes();
+                var rewards = advancement.value().rewards().recipes();
 
-                if (recipes.stream().anyMatch(rules::isVanilla) && player.getAdvancements().getOrStartProgress(advancement).isDone())
-                    player.awardRecipesByKey(recipes.stream().filter(recipe -> !nerb$removedRecipes.contains(recipe)).toList());
+                if (rewards.stream().anyMatch(rules::isVanilla) && player.getAdvancements().getOrStartProgress(advancement).isDone())
+                    player.awardRecipesByKey(rewards.stream().filter(recipe -> !nerb$removedRecipes.contains(recipe)).toList());
             }
 
-            original.call(player);
-        } else
-            player.connection.send(new ClientboundRecipeBookSettingsPacket(((ServerRecipeBook) (Object) this).getBookSettings().copy()));
+            recipes = Stream.concat(recipes.stream(), known.stream().filter(rules::isVanilla)).collect(ImmutableList.toImmutableList());
+            highlights = highlight.stream().filter(rules::isVanilla).toList();
+        }
 
-        if (rules.isDiscoveredMode())
-            player.connection.send(((RecipeManagerAccess) nerb$server.getRecipeManager()).nerb$getDiscoveredRecipes());
-        else if (!rules.hasVanillaRecipes())
-            player.connection.send(new ClientboundRecipeBookAddPacket(List.of(), true));
+        player.connection.send(new ClientboundRecipePacket(ClientboundRecipePacket.State.INIT, recipes, highlights, getBookSettings().copy()));
+        ci.cancel();
     }
 
-    @WrapOperation(method = {"sendInitialRecipeBook", "removeRecipes"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/stats/ServerRecipeBook$DisplayResolver;displaysForRecipe(Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Consumer;)V"))
-    private void onResolveVanillaDisplays(ServerRecipeBook.DisplayResolver resolver, ResourceKey<Recipe<?>> recipe, Consumer<RecipeDisplayEntry> output, Operation<Void> original) {
-        if (nerb$getRecipeBookRules().isVanilla(recipe))
-            original.call(resolver, recipe, output);
+    @Override
+    public void nerb$removeStaleRecipes(ServerPlayer player) {
+        var rules = nerb$getRecipeBookRules();
+        var previous = nerb$sentRules;
+        if (previous == rules)
+            return;
+
+        nerb$sentRules = rules;
+        if (previous == null)
+            return;
+
+        var removed = Stream.concat(
+                previous.discoveredRecipes().stream().filter(recipe -> !rules.isDiscovered(recipe)),
+                known.stream().filter(recipe -> previous.isVanilla(recipe) && !rules.isVanilla(recipe))
+        ).toList();
+        if (!removed.isEmpty())
+            player.connection.send(new ClientboundRecipePacket(ClientboundRecipePacket.State.REMOVE, removed, List.of(), getBookSettings().copy()));
     }
 
     @Inject(method = "fromNbt", at = @At("HEAD"), cancellable = true)
-    private void onLoad(CompoundTag tag, Predicate<ResourceKey<Recipe<?>>> predicate, CallbackInfo ci) {
+    private void onLoad(CompoundTag tag, RecipeManager recipeManager, CallbackInfo ci) {
         if (!ConfigRegistry.SERVER.isClearRecipeBookData())
             return;
 
-        var rules = nerb$getRecipeBookRules();
+        var rules = ((RecipeManagerAccess) recipeManager).nerb$getRecipeBookRules();
         if (rules.hasVanillaRecipes())
             return;
 
         if (rules.isDiscoveredMode())
-            ((ServerRecipeBook) (Object) this).setBookSettings(RecipeBookSettings.read(tag));
+            setBookSettings(RecipeBookSettings.read(tag));
 
         ci.cancel();
     }
 
     @ModifyVariable(method = "loadRecipes", at = @At("HEAD"), argsOnly = true)
-    private Consumer<ResourceKey<Recipe<?>>> onLoadRecipes(Consumer<ResourceKey<Recipe<?>>> output) {
+    private Consumer<RecipeHolder<?>> onLoadRecipes(Consumer<RecipeHolder<?>> output) {
         if (!ConfigRegistry.SERVER.isClearRecipeBookData())
             return output;
 
         var rules = nerb$getRecipeBookRules();
         return recipe -> {
-            if (rules.isVanilla(recipe))
+            if (rules.isVanilla(recipe.id()))
                 output.accept(recipe);
         };
     }

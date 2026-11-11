@@ -9,14 +9,16 @@
     "ClientRecipeBookMixin",
     "ContainerEventHandlerMixin",
     "RecipeBookComponentMixin",
-    "ScreenMixin"
+    "ScreenMixin",
+    "compat.emi.EMISidebarPanelMixin",
+    "compat.emi.EMIScreenManagerMixin"
   ],
   "mixins": [
     "ConfigManagerMixin",
     "PlayerAdvancementsAccessor",
     "PlayerAdvancementsMixin",
+    "PlayerListMixin",
     "RecipeManagerMixin",
-    "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin",
     "ServerRecipeBookMixin"
   ],

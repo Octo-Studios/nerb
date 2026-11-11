@@ -1,6 +1,6 @@
 package it.hurts.shatterbyte.nerb.common.mixin;
 
-import it.hurts.octostudios.octolib.modules.config.ConfigManager;
+import it.hurts.octostudios.octolib.module.config.ConfigManager;
 import it.hurts.shatterbyte.nerb.common.init.ConfigRegistry;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

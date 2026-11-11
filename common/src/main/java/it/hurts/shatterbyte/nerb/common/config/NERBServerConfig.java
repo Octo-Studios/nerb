@@ -1,8 +1,8 @@
 package it.hurts.shatterbyte.nerb.common.config;
 
-import it.hurts.octostudios.octolib.modules.config.annotations.Prop;
-import it.hurts.octostudios.octolib.modules.config.impl.ConfigSide;
-import it.hurts.octostudios.octolib.modules.config.impl.OctoConfig;
+import it.hurts.octostudios.octolib.module.config.annotation.Prop;
+import it.hurts.octostudios.octolib.module.config.impl.ConfigSide;
+import it.hurts.octostudios.octolib.module.config.impl.OctoConfig;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class NERBServerConfig implements OctoConfig {
 
     @Prop(comment = """
             Recipes to keep hidden from the vanilla book, even in DISCOVERED. Normal unlocking of these recipes is also skipped.
-            The recipes themselves remain in the game. This list does not filter JEI/REI interfaces.
+            The recipes themselves remain in the game. This list does not filter JEI/REI/EMI interfaces.
             Uses the same recipe ID and regex syntax as recipeWhitelist. Whitelist takes priority. An empty list adds no restrictions beyond recipeBookMode.
             """)
     private List<String> recipeBlacklist = new ArrayList<>();
