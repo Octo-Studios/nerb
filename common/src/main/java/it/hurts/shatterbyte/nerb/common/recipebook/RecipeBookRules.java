@@ -32,7 +32,7 @@ public class RecipeBookRules {
             return;
 
         for (var recipe : recipes) {
-            var id = recipe.id().identifier().toString();
+            var id = recipe.id().location().toString();
 
             if (whitelistPatterns.stream().anyMatch(pattern -> pattern.matcher(id).matches()))
                 whitelist.add(recipe.id());

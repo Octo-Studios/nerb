@@ -1,15 +1,15 @@
 package it.hurts.shatterbyte.nerb.common.config;
 
-import it.hurts.shatterbyte.shatterlib.module.config.annotation.Prop;
-import it.hurts.shatterbyte.shatterlib.module.config.impl.ConfigSide;
-import it.hurts.shatterbyte.shatterlib.module.config.impl.ShatterConfig;
+import it.hurts.octostudios.octolib.modules.config.annotations.Prop;
+import it.hurts.octostudios.octolib.modules.config.impl.ConfigSide;
+import it.hurts.octostudios.octolib.modules.config.impl.OctoConfig;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class NERBServerConfig implements ShatterConfig {
+public class NERBServerConfig implements OctoConfig {
     @Prop(comment = """
             Controls the vanilla recipe book on the server. The lists below override this choice.
             DISABLED: Stops recipe unlocking and sending recipes to the book, except for recipeWhitelist. Skips recipe book work for other recipes to reduce server load.

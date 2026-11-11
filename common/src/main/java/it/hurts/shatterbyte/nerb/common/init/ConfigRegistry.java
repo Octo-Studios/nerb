@@ -2,10 +2,10 @@ package it.hurts.shatterbyte.nerb.common.init;
 
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import it.hurts.octostudios.octolib.modules.config.ConfigManager;
 import it.hurts.shatterbyte.nerb.common.config.NERBClientConfig;
 import it.hurts.shatterbyte.nerb.common.config.NERBServerConfig;
 import it.hurts.shatterbyte.nerb.common.mixin.PlayerAdvancementsAccessor;
-import it.hurts.shatterbyte.shatterlib.module.config.ConfigManager;
 import net.minecraft.server.MinecraftServer;
 
 public class ConfigRegistry {
