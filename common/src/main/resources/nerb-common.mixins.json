@@ -15,6 +15,7 @@
     "PlayerAdvancementsAccessor",
     "PlayerAdvancementsMixin",
     "RecipeManagerMixin",
+    "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin",
     "ServerRecipeBookMixin"
   ],
