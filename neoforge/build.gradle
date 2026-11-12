@@ -16,7 +16,6 @@ loom {
 configurations {
     common
     forgelike
-    shadowCommon
     compileClasspath.extendsFrom common, forgeLike
     runtimeClasspath.extendsFrom common, forgeLike
     developmentNeoForge.extendsFrom common
@@ -28,8 +27,6 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     common(project(path: ":forge-like", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
-    shadowCommon(project(path: ":forge-like", configuration: "transformProductionForge")) { transitive false }
 }
 
 repositories {
@@ -53,8 +50,9 @@ processResources {
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
+    exclude "nerb-common-refmap.json"
 
-    configurations = [project.configurations.shadowCommon]
+    configurations = [project.configurations.common]
     archiveClassifier = "dev-" + loom.platform.get().name()
 }
 
